@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一带一路倡议 - 国际合作新平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        accent: '#36D399',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.8s ease-in-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .gradient-overlay {
+                background: linear-gradient(180deg, rgba(22,93,255,0.05) 0%, rgba(22,93,255,0.1) 100%);
+            }
+            .map-point {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                background-color: #FF7D00;
+                border-radius: 50%;
+                cursor: pointer;
+                z-index: 10;
+                transition: all 0.3s ease;
+            }
+            .map-point:hover {
+                transform: scale(1.5);
+                box-shadow: 0 0 0 8px rgba(255, 125, 0, 0.2);
+            }
+            .carousel-item {
+                transition: transform 0.5s ease-in-out;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark antialiased">
+    <!-- 导航栏 -->
+    <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between bg-white/90 backdrop-blur-sm shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                    <i class="fa fa-globe text-white text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-primary">一带一路</h1>
+            </div>
+            
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#news" class="font-medium text-dark hover:text-primary transition-colors">新闻动态</a>
+                <a href="#projects" class="font-medium text-dark hover:text-primary transition-colors">标志性工程</a>
+                <a href="#achievements" class="font-medium text-dark hover:text-primary transition-colors">合作成就</a>
+                <a href="#routes" class="font-medium text-dark hover:text-primary transition-colors">互联互通</a>
+                <a href="#principles" class="font-medium text-dark hover:text-primary transition-colors">合作原则</a>
+            </nav>
+            
+            <!-- 移动端菜单按钮 -->
+            <button class="md:hidden text-dark focus:outline-none" id="menuBtn">
+                <i class="fa fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobileMenu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                <a href="#news" class="font-medium text-dark hover:text-primary transition-colors py-2">新闻动态</a>
+                <a href="#projects" class="font-medium text-dark hover:text-primary transition-colors py-2">标志性工程</a>
+                <a href="#achievements" class="font-medium text-dark hover:text-primary transition-colors py-2">合作成就</a>
+                <a href="#routes" class="font-medium text-dark hover:text-primary transition-colors py-2">互联互通</a>
+                <a href="#principles" class="font-medium text-dark hover:text-primary transition-colors py-2">合作原则</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <!-- 英雄区域 -->
+        <section class="relative overflow-hidden bg-gradient-to-r from-primary to-primary/80 text-white">
+            <div class="absolute inset-0 opacity-10">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                    <path fill="#FFFFFF" d="M43.8,-79.2C57.6,-72.6,71.2,-62.9,79.8,-49.8C88.3,-36.7,91.9,-20.2,89.3,-4.1C86.7,12.1,77.9,28.2,68.1,39.4C58.3,50.6,47.5,56.9,34.6,63.6C21.7,70.3,7.8,77.4,-5.4,81.9C-18.6,86.4,-31.1,88.2,-45.1,83.7C-59.1,79.2,-74.5,68.4,-82.3,54.3C-90.1,40.2,-90.3,22.8,-87.9,6.2C-85.5,-10.4,-80.4,-26.8,-72.6,-39.3C-64.8,-51.8,-54.3,-60.4,-42.4,-66.4C-30.5,-72.4,-17.2,-75.8,-0.9,-78.1C15.4,-80.4,30.9,-81.7,43.8,-79.2Z" transform="translate(100 100)" />
+                </svg>
+            </div>
+            <div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-tight mb-6 opacity-0" id="hero-title">
+                        一带一路<br>共建人类命运共同体
+                    </h1>
+                    <p class="text-[clamp(1rem,2vw,1.25rem)] opacity-90 mb-8 opacity-0" id="hero-subtitle">
+                        穿越地理阻隔，跨越文化差异，共建"一带一路"倡议赢得广泛认同与支持
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 opacity-0" id="hero-cta">
+                        <a href="#projects" class="px-8 py-3 bg-white text-primary font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                            探索标志性工程
+                        </a>
+                        <a href="#achievements" class="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all">
+                            了解合作成就
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-light to-transparent"></div>
+        </section>
+
+        <!-- 新闻由头 -->
+        <section id="news" class="py-16 md:py-24 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        共建"一带一路"倡议赢得广泛认同与支持
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-gray-700 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        近日，第二届中国-中亚峰会、中国—拉共体论坛第四届部长级会议、第二届"一带一路"科技交流大会、第四届中国—非洲经贸博览会、东盟－中国－海合会峰会等一系列多边合作盛会成功举办。共建"一带一路"倡议在风云变幻的国际格局中，穿越地理阻隔，跨越文化差异，赢得广泛认同与支持。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.1s">
+                        <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-handshake-o text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">国际合作平台</h3>
+                        <p class="text-gray-700">
+                            共建"一带一路"已经取得多方面丰硕的国际合作成果，给相关国家带来实实在在的利益，成为深受欢迎的国际公共产品和国际合作平台。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.2s">
+                        <div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-globe text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">互联互通网络</h3>
+                        <p class="text-gray-700">
+                            基础设施互联互通是"一带一路"建设的优先领域。目前，以铁路、公路、港口、航空、能源管道等为代表的基础设施项目，在共建国家稳步推进。
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.3s">
+                        <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-lightbulb-o text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">创新合作模式</h3>
+                        <p class="text-gray-700">
+                            "一带一路"建设不仅注重传统领域合作，还积极探索科技创新、绿色发展、数字经济等新领域合作，为世界经济增长开辟了新空间。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 标志性工程 -->
+        <section id="projects" class="py-16 md:py-24 bg-gradient-to-b from-light to-primary/5">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        标志性工程
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-gray-700 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        共建"一带一路"倡议推动了一大批基础设施项目的建设，为相关国家的经济发展和民生改善带来了实实在在的利益。
+                    </p>
+                </div>
+                
+                <!-- 轮播图 -->
+                <div class="relative max-w-5xl mx-auto overflow-hidden rounded-xl shadow-xl opacity-0" data-animate="fade-in" style="transition-delay: 0.6s">
+                    <div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+                        <!-- 轮播项1 -->
+                        <div class="min-w-full relative">
+                            <img src="https://picsum.photos/id/1033/1200/600" alt="马尔代夫中马友谊大桥" class="w-full h-[500px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">马尔代夫中马友谊大桥</h3>
+                                <p class="text-white/90 mb-4">2025年6月20日，马尔代夫总统宣布中马友谊大桥通车日为"国家工程师日"，为一带一路工程设立国家节日</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-map-marker text-white"></i>
+                                    <span class="text-white/80">马尔代夫</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 轮播项2 -->
+                        <div class="min-w-full relative">
+                            <img src="https://picsum.photos/id/1036/1200/600" alt="希腊比雷埃夫斯港" class="w-full h-[500px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">希腊比雷埃夫斯港</h3>
+                                <p class="text-white/90 mb-4">比雷埃夫斯港集装箱吞吐量2010年为88万标准箱，2023年已跃升至510.09万标准箱</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-map-marker text-white"></i>
+                                    <span class="text-white/80">希腊</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 轮播项3 -->
+                        <div class="min-w-full relative">
+                            <img src="https://picsum.photos/id/1041/1200/600" alt="中老铁路" class="w-full h-[500px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">中老铁路</h3>
+                                <p class="text-white/90 mb-4">开通一周年，累计发送旅客超200万人次，运输货物超1000万吨</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-map-marker text-white"></i>
+                                    <span class="text-white/80">中国-老挝</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 轮播项4 -->
+                        <div class="min-w-full relative">
+                            <img src="https://picsum.photos/id/1059/1200/600" alt="肯尼亚蒙内铁路" class="w-full h-[500px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">肯尼亚蒙内铁路</h3>
+                                <p class="text-white/90 mb-4">运营八周年，累计运送旅客1534.2万人次，累计运输货物4039.6万吨</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-map-marker text-white"></i>
+                                    <span class="text-white/80">肯尼亚</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 轮播项5 -->
+                        <div class="min-w-full relative">
+                            <img src="https://picsum.photos/id/1061/1200/600" alt="中欧班列" class="w-full h-[500px] object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8 md:p-12">
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">中欧班列</h3>
+                                <p class="text-white/90 mb-4">中欧班列累计开行超9万列，发送货物超870万标箱、货值超3800亿美元</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-map-marker text-white"></i>
+                                    <span class="text-white/80">中国-欧洲</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 轮播控制按钮 -->
+                    <button class="absolute top-1/2 left-4 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-primary hover:bg-white transition-colors z-10" id="prevBtn">
+                        <i class="fa fa-angle-left text-xl"></i>
+                    </button>
+                    <button class="absolute top-1/2 right-4 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-primary hover:bg-white transition-colors z-10" id="nextBtn">
+                        <i class="fa fa-angle-right text-xl"></i>
+                    </button>
+                    
+                    <!-- 轮播指示器 -->
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator active" data-index="0"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator" data-index="1"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator" data-index="2"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator" data-index="3"></button>
+                        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors carousel-indicator" data-index="4"></button>
+                    </div>
+                </div>
+                
+                <!-- 工程数据卡片 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.1s">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-sun-o text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">匈牙利考波什堡光伏电站</h3>
+                        <p class="text-gray-700 mb-3">每年发电1.3亿度，节约4.5万吨标准煤，减少12万吨二氧化碳排放</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa fa-map-marker text-gray-500"></i>
+                            <span class="text-gray-600">匈牙利</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.2s">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-television text-secondary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">斯里兰卡科伦坡莲花电视塔</h3>
+                        <p class="text-gray-700 mb-3">塔高350米，是南亚地区最高的电视塔</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa fa-map-marker text-gray-500"></i>
+                            <span class="text-gray-600">斯里兰卡</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.3s">
+                        <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-road text-accent text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">莫桑比克马普托大桥</h3>
+                        <p class="text-gray-700 mb-3">全长三公里，主跨680米，被当地人誉为"梦想之桥"</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa fa-map-marker text-gray-500"></i>
+                            <span class="text-gray-600">莫桑比克</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.4s">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-tint text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">巴基斯坦卡洛特水电站</h3>
+                        <p class="text-gray-700 mb-3">年发电量36.4亿千瓦时，相当于节约标准煤约159万吨，减排二氧化碳约398万吨</p>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa fa-map-marker text-gray-500"></i>
+                            <span class="text-gray-600">巴基斯坦</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 多方面成就 -->
+        <section id="achievements" class="py-16 md:py-24 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        多方面成就
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-gray-700 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        共建"一带一路"倡议在政策沟通、设施联通、贸易畅通、资金融通、民心相通等方面取得了显著成效，为世界经济增长开辟了新空间。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- 政策沟通 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden opacity-0" data-animate="slide-up" style="transition-delay: 0.1s">
+                        <div class="h-48 bg-primary/10 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fa fa-comments text-primary text-7xl opacity-20"></i>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center p-8">
+                                <h3 class="text-2xl font-bold text-primary text-center">政策沟通与多边合作</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">中国已与152个国家、38个国际组织签署216份共建合作文件，覆盖全球83%主权国家</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">在联合国层面，"一带一路"倡议连续纳入安理会决议、联大文件及14家联合国机构专项合作</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">第三届"一带一路"国际合作高峰论坛有包括23位外国领导人、联合国秘书长、3位领导人特别代表在内的151个国家和41个国际组织的代表参会</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-primary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">共建国家依托中国－东盟（10+1）合作、中非合作论坛、中阿合作论坛等重大多边合作机制平台，不断深化务实合作</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 经贸往来 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden opacity-0" data-animate="slide-up" style="transition-delay: 0.2s">
+                        <div class="h-48 bg-secondary/10 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fa fa-line-chart text-secondary text-7xl opacity-20"></i>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center p-8">
+                                <h3 class="text-2xl font-bold text-secondary text-center">经贸往来</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-secondary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">2013－2024年，中国与共建国家进出口总额累计突破21万亿美元，年均增长6.4%</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-secondary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">截至2024年9月末，共有13家中资银行在50个共建国家设立145家一级机构</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-secondary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">亚洲基础设施投资银行成员保持106个，批准投资项目235个，共投资456亿美元</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-secondary text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">中国信保2024年承保规模突破103.5亿美元，为共建"一带一路"提供全方位风险保障</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 文化教育交流 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden opacity-0" data-animate="slide-up" style="transition-delay: 0.3s">
+                        <div class="h-48 bg-accent/10 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fa fa-book text-accent text-7xl opacity-20"></i>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center p-8">
+                                <h3 class="text-2xl font-bold text-accent text-center">文化教育交流</h3>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-accent text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">截至2024年9月末，中国已与148个共建国家签署文化和旅游领域合作文件</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-accent text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">中国院校在135个共建国家设立310所孔子学院、318所孔子课堂</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-accent text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">"汉语桥"项目累计邀请112个共建国家近5.5万名青少年来华交流</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center mt-1 mr-3 flex-shrink-0">
+                                        <i class="fa fa-check text-accent text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">76个国家和地区的382家民间组织加入丝绸之路沿线民间组织合作网络，开展民生合作项目560余项</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 基础设施互联互通 -->
+                <div class="mt-16 bg-white rounded-xl shadow-md p-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                    <h3 class="text-2xl font-bold mb-6 text-center">基础设施互联互通</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                基础设施互联互通是"一带一路"建设的优先领域。目前，以铁路、公路、港口、航空、能源管道等为代表的基础设施项目，在共建国家稳步推进，为各国经济发展创造了良好条件。
+                            </p>
+                            <ul class="space-y-3">
+                                <li class="flex items-center">
+                                    <i class="fa fa-train text-primary mr-3"></i>
+                                    <span class="text-gray-700">中老铁路、雅万高铁等铁路项目顺利建成通车</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-road text-primary mr-3"></i>
+                                    <span class="text-gray-700">公路网络不断完善，连接各国的公路通道更加便捷</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-ship text-primary mr-3"></i>
+                                    <span class="text-gray-700">港口建设取得显著进展，比雷埃夫斯港、瓜达尔港等成为区域航运中心</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-plane text-primary mr-3"></i>
+                                    <span class="text-gray-700">航空运输网络不断扩展，航线数量和航班频次持续增加</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fa fa-bolt text-primary mr-3"></i>
+                                    <span class="text-gray-700">能源合作项目稳步推进，跨境电力与输电通道建设取得积极成果</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="bg-primary/5 rounded-lg p-6 h-full">
+                                <h4 class="text-xl font-bold mb-4 text-center">基础设施投资增长</h4>
+                                <canvas id="infrastructureChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 路线图 -->
+        <section id="routes" class="py-16 md:py-24 bg-gradient-to-b from-primary/5 to-primary/10">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        互联互通路线图
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-gray-700 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        "一带一路"倡议以互联互通为核心，构建了全方位、多层次、复合型的基础设施网络，为世界经济增长开辟了新空间。
+                    </p>
+                </div>
+                
+                <div class="relative bg-white rounded-xl shadow-lg p-4 md:p-8 overflow-hidden opacity-0" data-animate="fade-in" style="transition-delay: 0.6s">
+                    <!-- 简化的世界地图 -->
+                    <div class="relative w-full h-[400px] md:h-[500px] bg-primary/5 rounded-lg overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://picsum.photos/id/101/1200/800')] bg-cover bg-center opacity-10"></div>
+                        
+                        <!-- 丝绸之路经济带三大走向 -->
+                        <div class="absolute inset-0">
+                            <!-- 第一条路线：中国西北、东北经中亚、俄罗斯至欧洲、波罗的海 -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 600">
+                                <path d="M200,300 C300,200 450,250 600,200 C700,180 800,220 900,180" stroke="#165DFF" stroke-width="4" stroke-dasharray="8,4" fill="none" class="animate-pulse-slow" />
+                                <circle cx="200" cy="300" r="8" fill="#165DFF" />
+                                <circle cx="900" cy="180" r="8" fill="#165DFF" />
+                            </svg>
+                            
+                            <!-- 第二条路线：中国西北经中亚、西亚至波斯湾、地中海 -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 600">
+                                <path d="M200,300 C350,350 500,400 650,450 C750,500 850,450 900,400" stroke="#FF7D00" stroke-width="4" stroke-dasharray="8,4" fill="none" class="animate-pulse-slow" style="animation-delay: 1s" />
+                                <circle cx="200" cy="300" r="8" fill="#FF7D00" />
+                                <circle cx="900" cy="400" r="8" fill="#FF7D00" />
+                            </svg>
+                            
+                            <!-- 第三条路线：中国西南经中南半岛至印度洋 -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 600">
+                                <path d="M250,400 C350,450 500,450 650,500 C750,520 850,500 900,520" stroke="#36D399" stroke-width="4" stroke-dasharray="8,4" fill="none" class="animate-pulse-slow" style="animation-delay: 2s" />
+                                <circle cx="250" cy="400" r="8" fill="#36D399" />
+                                <circle cx="900" cy="520" r="8" fill="#36D399" />
+                            </svg>
+                            
+                            <!-- 21世纪海上丝绸之路两大走向 -->
+                            <!-- 第一条路线：中国沿海港口过南海，经马六甲海峡到印度洋，延伸至欧洲 -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 600">
+                                <path d="M300,250 C400,300 500,350 600,400 C700,450 800,400 900,350" stroke="#A855F7" stroke-width="4" stroke-dasharray="8,4" fill="none" class="animate-pulse-slow" style="animation-delay: 0.5s" />
+                                <circle cx="300" cy="250" r="8" fill="#A855F7" />
+                                <circle cx="900" cy="350" r="8" fill="#A855F7" />
+                            </svg>
+                            
+                            <!-- 第二条路线：中国沿海港口过南海，向南太平洋延伸 -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 600">
+                                <path d="M300,250 C400,350 500,450 600,550 C700,600 800,580 900,620" stroke="#EC4899" stroke-width="4" stroke-dasharray="8,4" fill="none" class="animate-pulse-slow" style="animation-delay: 1.5s" />
+                                <circle cx="300" cy="250" r="8" fill="#EC4899" />
+                                <circle cx="900" cy="620" r="8" fill="#EC4899" />
+                            </svg>
+                        </div>
+                        
+                        <!-- 路线说明 -->
+                        <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-md">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-primary mb-2">丝绸之路经济带三大走向</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-primary mr-2"></span> 中国西北、东北经中亚、俄罗斯至欧洲、波罗的海</li>
+                                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-secondary mr-2"></span> 中国西北经中亚、西亚至波斯湾、地中海</li>
+                                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-accent mr-2"></span> 中国西南经中南半岛至印度洋</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-primary mb-2">21世纪海上丝绸之路两大走向</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span> 中国沿海港口过南海，经马六甲海峡到印度洋，延伸至欧洲</li>
+                                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-pink-500 mr-2"></span> 中国沿海港口过南海，向南太平洋延伸</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 原则、理念、目标、特点 -->
+        <section id="principles" class="py-16 md:py-24 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        合作原则与理念
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-gray-700 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        "一带一路"倡议坚持共商、共建、共享原则，秉持开放、绿色、廉洁理念，以高标准、可持续、惠民生为目标，努力实现和平、繁荣、开放、创新、文明的美好愿景。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- 原则 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.1s">
+                        <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-handshake-o text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">原则</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-primary mr-2"></i>
+                                <span>共商</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-primary mr-2"></i>
+                                <span>共建</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-primary mr-2"></i>
+                                <span>共享</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 理念 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.2s">
+                        <div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-lightbulb-o text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">理念</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-secondary mr-2"></i>
+                                <span>开放</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-secondary mr-2"></i>
+                                <span>绿色</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-secondary mr-2"></i>
+                                <span>廉洁</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 目标 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.3s">
+                        <div class="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+                            <i class="fa fa-bullseye text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">目标</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-accent mr-2"></i>
+                                <span>高标准</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-accent mr-2"></i>
+                                <span>可持续</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-accent mr-2"></i>
+                                <span>惠民生</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 特点 -->
+                    <div class="bg-white rounded-xl shadow-md p-6 card-hover opacity-0" data-animate="slide-up" style="transition-delay: 0.4s">
+                        <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                            <i class="fa fa-star text-purple-500 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">特点</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-purple-500 mr-2"></i>
+                                <span>和平</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-purple-500 mr-2"></i>
+                                <span>繁荣</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-purple-500 mr-2"></i>
+                                <span>开放</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-purple-500 mr-2"></i>
+                                <span>创新</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fa fa-check-circle text-purple-500 mr-2"></i>
+                                <span>文明</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 挑战 -->
+        <section class="py-16 md:py-24 bg-dark text-white">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center mb-16">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 opacity-0" data-animate="fade-in">
+                        面临的挑战
+                    </h2>
+                    <div class="w-20 h-1 bg-white mx-auto mb-8 opacity-0" data-animate="fade-in" style="transition-delay: 0.2s"></div>
+                    <p class="text-lg text-white/80 opacity-0" data-animate="fade-in" style="transition-delay: 0.4s">
+                        "一带一路"倡议在推进过程中面临着复杂的国际环境和诸多挑战，但中方始终保持开放、透明、包容的态度，与各方共同应对挑战，推动共建"一带一路"高质量发展。
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 政治施压 -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/30 transition-colors opacity-0" data-animate="slide-up" style="transition-delay: 0.1s">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mr-4">
+                                <i class="fa fa-shield text-red-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">政治施压</h3>
+                        </div>
+                        <p class="text-white/80 mb-4">
+                            美国持续对战略要地国家施加高压，2025年迫使穆利诺政府终止"一带一路"合作备忘录，旨在切断中国在巴拿马运河的物流影响力。在尼日尔，美方借2023年军事政变扶植亲美政权，施压新政府破坏中尼合作。
+                        </p>
+                    </div>
+                    
+                    <!-- 联合盟友 -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/30 transition-colors opacity-0" data-animate="slide-up" style="transition-delay: 0.2s">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mr-4">
+                                <i class="fa fa-users text-red-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">联合盟友</h3>
+                        </div>
+                        <p class="text-white/80 mb-4">
+                            美日澳构建"印太铁三角"实施精准绞杀。2024年澳大利亚国防部以"国家安全"为由，强制中企出售达尔文港99年租约资产，摧毁北澳地区海陆联运枢纽；在南海方向，美日向菲律宾提供24艘武装巡逻艇及2.4亿美元军事援助，策动其2023年单方面废弃中菲铁路贷款协议。
+                        </p>
+                    </div>
+                    
+                    <!-- 利用混乱 -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/30 transition-colors opacity-0" data-animate="slide-up" style="transition-delay: 0.3s">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mr-4">
+                                <i class="fa fa-random text-red-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">利用混乱</h3>
+                        </div>
+                        <p class="text-white/80 mb-4">
+                            西方情报机构深度介入地区动荡。巴基斯坦俾路支解放军在CIA武器支持下，2024年5月对瓜达尔港发动汽车炸弹袭击，造成9名中国工程师死亡，旨在瘫痪中巴经济走廊西线枢纽；在尼日尔，利用军事政变制造的混乱破坏中资企业投资。
+                        </p>
+                    </div>
+                    
+                    <!-- 舆论抹黑 -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/30 transition-colors opacity-0" data-animate="slide-up" style="transition-delay: 0.4s">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mr-4">
+                                <i class="fa fa-newspaper-o text-red-400 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">舆论抹黑</h3>
+                        </div>
+                        <p class="text-white/80 mb-4">
+                            西方构建全媒体抹黑矩阵。美国传统基金会发布所谓《债务陷阱地图》将斯里兰卡汉班托塔港商业租赁歪曲为"军事基地扩张"，却隐瞒该港债务仅占斯国总外债3.7%的事实；《纽约时报》诬指蒙内铁路"破坏生态"，刻意忽略项目配套建成13处野生动物迁徙通道。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-16 text-center opacity-0" data-animate="fade-in" style="transition-delay: 0.6s">
+                    <p class="text-lg text-white/90 mb-6">
+                        尽管面临诸多挑战，"一带一路"倡议依然展现出强大的生命力和吸引力。未来，中方将继续与共建国家一道，携手应对挑战，推动共建"一带一路"高质量发展，为世界经济增长开辟新空间，为国际贸易和投资搭建新平台。
+                    </p>
+                    <a href="#news" class="inline-block px-8 py-3 bg-primary text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        了解更多
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                            <i class="fa fa-globe text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">一带一路</h3>
+                    </div>
+                    <p class="text-white/70 mb-4">
+                        共建"一带一路"倡议秉持共商共建共享原则，为世界经济增长开辟了新空间，为国际贸易和投资搭建了新平台。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#news" class="text-white/70 hover:text-white transition-colors">新闻动态</a></li>
+                        <li><a href="#projects" class="text-white/70 hover:text-white transition-colors">标志性工程</a></li>
+                        <li><a href="#achievements" class="text-white/70 hover:text-white transition-colors">合作成就</a></li>
+                        <li><a href="#routes" class="text-white/70 hover:text-white transition-colors">互联互通</a></li>
+                        <li><a href="#principles" class="text-white/70 hover:text-white transition-colors">合作原则</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">资源中心</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">政策文件</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">研究报告</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">统计数据</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">媒体资讯</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">常见问题</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                            <span class="text-white/70">北京市朝阳区建国门外大街1号</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone text-primary mr-3"></i>
+                            <span class="text-white/70">+86 10 12345678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope text-primary mr-3"></i>
+                            <span class="text-white/70">info@beltroad.gov.cn</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-12 pt-8 text-center">
+                <p class="text-white/60">© 2025 一带一路倡议. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-white', 'shadow');
+                navbar.classList.remove('bg-white/90');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow');
+                navbar.classList.add('bg-white/90');
+            }
+        });
+        
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // 英雄区域动画
+        setTimeout(() => {
+            document.getElementById('hero-title').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
+            setTimeout(() => {
+                document.getElementById('hero-subtitle').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
+                setTimeout(() => {
+                    document.getElementById('hero-cta').classList.add('opacity-100', 'transition-opacity', 'duration-1000');
+                }, 300);
+            }, 300);
+        }, 300);
+        
+        // 滚动动画
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('[data-animate]');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight * 0.85) {
+                    if (element.dataset.animate === 'fade-in') {
+                        element.classList.add('opacity-100', 'transition-opacity', 'duration-1000');
+                    } else if (element.dataset.animate === 'slide-up') {
+                        element.classList.add('opacity-100', 'translate-y-0', 'transition-all', 'duration-700');
+                    }
+                }
+            });
+        };
+        
+        // 初始调用一次
+        animateOnScroll();
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // 轮播图
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        let currentIndex = 0;
+        const totalItems = 5;
+        
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // 更新指示器
+            indicators.forEach((indicator, index) => {
+                if (index === currentIndex) {
+                    indicator.classList.add('bg-white');
+                    indicator.classList.remove('bg-white/50');
+                } else {
+                    indicator.classList.remove('bg-white');
+                    indicator.classList.add('bg-white/50');
+                }
+            });
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        });
+        
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }, 5000);
+        
+        // 基础设施投资增长图表
+        const ctx = document.getElementById('infrastructureChart').getContext('2d');
+        const infrastructureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: '基础设施投资(亿美元)',
+                    data: [120, 180, 230, 290, 350, 420, 480, 530, 580, 630, 680, 750],
+                    backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                    borderColor: '#165DFF',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#1E293B',
+                        bodyColor: '#1E293B',
+                        borderColor: 'rgba(22, 93, 255, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        boxPadding: 6,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                return `投资: ${context.parsed.y} 亿美元`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+    

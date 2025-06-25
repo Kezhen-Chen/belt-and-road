@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴拿马运河事件专题报道</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        usa: '#D81F26',
+                        china: '#0047AB',
+                        result: '#6B7280',
+                        canal: '#1E40AF',
+                        highlight: '#F97316'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .timeline-line {
+                @apply absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 transform -translate-x-1/2;
+            }
+            .timeline-dot {
+                @apply absolute left-1/2 w-6 h-6 bg-canal rounded-full border-4 border-white shadow-md transform -translate-x-1/2 z-10 cursor-pointer transition-all duration-300 hover:scale-125 hover:bg-highlight;
+            }
+            .info-card {
+                @apply bg-white rounded-xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-105;
+            }
+            .perspective {
+                perspective: 1000px;
+            }
+            .preserve-3d {
+                transform-style: preserve-3d;
+            }
+            .backface-hidden {
+                backface-visibility: hidden;
+            }
+            .rotate-y-180 {
+                transform: rotateY(180deg);
+            }
+            .flip-card {
+                @apply perspective h-64 w-full cursor-pointer;
+            }
+            .flip-card-inner {
+                @apply relative w-full h-full transition-transform duration-500 preserve-3d;
+            }
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+            .flip-card-front, .flip-card-back {
+                @apply absolute w-full h-full backface-hidden;
+            }
+            .flip-card-back {
+                @apply rotate-y-180 bg-white p-4 rounded-lg shadow-lg;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-gray-800">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-ship text-canal text-2xl"></i>
+                <h1 class="text-xl font-bold text-canal">巴拿马运河事件</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#timeline" class="font-medium hover:text-canal transition-colors">事件时间线</a>
+                <a href="#confrontation" class="font-medium hover:text-canal transition-colors">双方对峙分析</a>
+                <a href="#international" class="font-medium hover:text-canal transition-colors">国际态度拼图</a>
+                <a href="#impact" class="font-medium hover:text-canal transition-colors">影响与展望</a>
+            </nav>
+            <button class="md:hidden text-gray-500 hover:text-canal">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="relative bg-gradient-to-r from-canal to-blue-900 text-white py-20 md:py-32">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-4">巴拿马运河事件</h1>
+                <p class="text-[clamp(1rem,2vw,1.25rem)] opacity-90 mb-8">地缘政治博弈下的战略要道之争</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#timeline" class="bg-white text-canal px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors shadow-lg">
+                        探索时间线
+                    </a>
+                    <a href="#confrontation" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+                        分析对峙
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120">
+                <path fill="#f9fafb" fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 事件时间线 -->
+    <section id="timeline" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-gray-800 mb-4">事件时间线</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">按时间顺序回顾巴拿马运河事件的发展历程，了解这一地缘政治事件的来龙去脉</p>
+            </div>
+
+            <!-- 运河航线图背景 -->
+            <div class="relative h-[600px] bg-blue-50 rounded-2xl overflow-hidden mb-16" data-map="canal-route">
+                <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1016/1920/1080')] bg-cover bg-center opacity-10"></div>
+                
+                <!-- 运河路径示意 -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <svg class="w-full h-full" viewBox="0 0 1000 600">
+                        <!-- 运河路径 -->
+                        <path d="M100,300 C250,150 350,450 500,300 C650,150 750,450 900,300" 
+                              fill="none" stroke="#1E40AF" stroke-width="6" stroke-linecap="round" />
+                        
+                        <!-- 关键事件标记点 -->
+                        <circle cx="100" cy="300" r="12" fill="#1E40AF" class="timeline-dot" data-event="background"></circle>
+                        <circle cx="250" cy="150" r="12" fill="#1E40AF" class="timeline-dot" data-event="cooperation-2017"></circle>
+                        <circle cx="350" cy="450" r="12" fill="#1E40AF" class="timeline-dot" data-event="pressure-2024"></circle>
+                        <circle cx="500" cy="300" r="12" fill="#1E40AF" class="timeline-dot" data-event="termination-2025"></circle>
+                        <circle cx="650" cy="150" r="12" fill="#1E40AF" class="timeline-dot" data-event="economic-impact"></circle>
+                        <circle cx="750" cy="450" r="12" fill="#1E40AF" class="timeline-dot" data-event="international-response"></circle>
+                        <circle cx="900" cy="300" r="12" fill="#1E40AF" class="timeline-dot" data-event="future"></circle>
+                    </svg>
+                </div>
+                
+                <!-- 事件标记点说明 -->
+                <div class="absolute bottom-4 left-4 right-4 bg-white/90 rounded-lg p-4 shadow-lg">
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">运河主权争端</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">2017年中巴合作</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">2024年美国施压</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">2025年终止协议</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">经济影响</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">国际响应</span>
+                        <span class="px-3 py-1 bg-canal/10 text-canal rounded-full text-sm font-medium">未来展望</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 信息图标 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="info-card" id="political-info">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fa fa-university text-canal text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">政治维度</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">巴拿马运河的政治争端源于历史遗留问题和大国博弈，美国试图通过外交施压和舆论抹黑来维护其在该地区的影响力。</p>
+                    <button class="text-canal hover:text-blue-700 font-medium flex items-center">
+                        展开详情 <i class="fa fa-chevron-down ml-2 transition-transform duration-300"></i>
+                    </button>
+                    <div class="mt-4 hidden political-details">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">历史主权争端</h4>
+                            <p class="text-gray-600 mb-3">美国曾于1903-1999年控制巴拿马运河，1999年主权移交巴拿马后，美国仍保持强大影响力。2024年特朗普胜选后，多次宣称"美国应收回运河控制权"，引发国际社会关注。</p>
+                            
+                            <h4 class="font-semibold mb-2">外交博弈</h4>
+                            <p class="text-gray-600">2025年1月，美国国务卿鲁比奥散布"中国可在战争时关闭运河"的谣言，声称中资港口运营构成"美国国家安全威胁"，完全无视运河中立的国际法地位。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card" id="economic-info">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                            <i class="fa fa-money text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">经济维度</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">运河是巴拿马经济的重要支柱，占其GDP的4%。美国的施压和巴拿马的政策变化对运河的经济收益和中巴合作项目产生了重大影响。</p>
+                    <button class="text-green-600 hover:text-green-800 font-medium flex items-center">
+                        展开详情 <i class="fa fa-chevron-down ml-2 transition-transform duration-300"></i>
+                    </button>
+                    <div class="mt-4 hidden economic-details">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">经济数据</h4>
+                            <p class="text-gray-600 mb-3">2024年运河收入为24.7亿美元，占巴拿马GDP的4%。若美国免费通行实施，巴拿马年财政损失将达2.47亿美元。</p>
+                            
+                            <h4 class="font-semibold mb-2">合作项目影响</h4>
+                            <p class="text-gray-600">2025年2月，巴拿马宣布退出"一带一路"，重审对华合作。中资企业参与的运河两端港口建设项目受到影响，香港和记黄埔运营的大西洋侧科隆集装箱港口被美国贝莱德财团收购。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card" id="ecological-info">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mr-4">
+                            <i class="fa fa-leaf text-emerald-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">生态维度</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">气候变化导致的干旱已经影响了运河的通行能力，而地缘政治博弈可能进一步加剧运河的生态压力。</p>
+                    <button class="text-emerald-600 hover:text-emerald-800 font-medium flex items-center">
+                        展开详情 <i class="fa fa-chevron-down ml-2 transition-transform duration-300"></i>
+                    </button>
+                    <div class="mt-4 hidden ecological-details">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">干旱影响</h4>
+                            <p class="text-gray-600 mb-3">2023年起厄尔尼诺现象导致干旱，运河水位下降，通行量减少40%（日均从40艘降至32艘），预计2024年收入再降2亿美元。</p>
+                            
+                            <h4 class="font-semibold mb-2">生态保护挑战</h4>
+                            <p class="text-gray-600">运河管理需要平衡经济发展与生态保护。地缘政治紧张局势可能导致资源分配不均，进一步加剧生态压力。巴拿马运河管理局已启动多项生态保护计划，包括水资源管理和生物多样性保护。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 双方对峙分析 -->
+    <section id="confrontation" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-gray-800 mb-4">双方对峙分析</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">深入分析美国与巴拿马在运河问题上的博弈，以及中国的应对策略和事件的影响</p>
+            </div>
+
+            <!-- 三列响应式表格 -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-xl shadow-lg overflow-hidden">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-4 bg-usa/10 text-usa font-semibold text-left cursor-pointer hover:bg-usa/20 transition-colors" data-sort="us">
+                                美方手段 <i class="fa fa-sort ml-1"></i>
+                            </th>
+                            <th class="px-6 py-4 bg-china/10 text-china font-semibold text-left cursor-pointer hover:bg-china/20 transition-colors" data-sort="china">
+                                中方应对 <i class="fa fa-sort ml-1"></i>
+                            </th>
+                            <th class="px-6 py-4 bg-result/10 text-result font-semibold text-left cursor-pointer hover:bg-result/20 transition-colors" data-sort="result">
+                                影响结果 <i class="fa fa-sort ml-1"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 bg-usa/5">
+                                <div class="font-medium mb-2">外交威胁与污名化</div>
+                                <p class="text-gray-600">2025年2月，国务卿鲁比奥访巴拿马，当面威胁巴总统穆利诺"削弱中国影响力"，否则将采取"必要行动"；诬称中国在运河的存在违反1977年条约，威胁运河"中立性"。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-china/5">
+                                <div class="font-medium mb-2">主权澄清与合作声明</div>
+                                <p class="text-gray-600">中国外交部发言人毛宁重申中方尊重巴拿马运河主权和中立原则，强调"中国从未参与运河管理运营"；巴拿马运河管理局（ACP）联合中方发布事实声明，证明中企仅运营商业港口，无运河管理权。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-result/5">
+                                <div class="font-medium mb-2">国际声援与谴责</div>
+                                <p class="text-gray-600">巴拿马总统穆利诺公开驳斥美方指控，强调"运河主权不容谈判"；国际舆论谴责美方干涉主权，墨西哥、哥伦比亚声援巴拿马。</p>
+                            </td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 bg-usa/5">
+                                <div class="font-medium mb-2">经济胁迫与单边制裁</div>
+                                <p class="text-gray-600">特朗普政府威胁对巴拿马加征关税，并单方面宣布"美政府船只免费通行运河"；施压巴拿马政府启动对中企港口特许权的"违宪调查"。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-china/5">
+                                <div class="font-medium mb-2">国际规则与多边协调</div>
+                                <p class="text-gray-600">中方通过国际经贸组织质疑美方关税违反WTO规则；巴拿马运河管理局（ACP）当日驳斥免费通行声明，强调"未调整任何费用，拒绝优惠待遇"。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-result/5">
+                                <div class="font-medium mb-2">经济损失与合作调整</div>
+                                <p class="text-gray-600">若美免费通行实施，巴拿马年财政损失2.47亿美元；中企被迫终止港口特许权，香港和记黄埔港口被贝莱德收购。</p>
+                            </td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 bg-usa/5">
+                                <div class="font-medium mb-2">军事讹诈与协议干预</div>
+                                <p class="text-gray-600">国防部长赫格塞思访巴，提议"美军重返运河防卫"，并签署谅解备忘录要求恢复美军在谢尔曼堡基地的驻扎权；美方炒作"中国制定关闭运河预案"，要求巴拿马配合美军"保障航道安全"。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-china/5">
+                                <div class="font-medium mb-2">法律主权硬怼与区域合作</div>
+                                <p class="text-gray-600">巴总统穆利诺四度修改美巴安全协议，删除"外国驻军""领土让渡"条款；中方联合拉美国家发布联合声明，谴责美军存在违反《巴拿马运河中立条约》。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-result/5">
+                                <div class="font-medium mb-2">协议终止与地区连锁反应</div>
+                                <p class="text-gray-600">巴拿马终止"一带一路"协议，重新评估对华合作；哥斯达黎加、萨尔瓦多暂停与华基建项目评估。</p>
+                            </td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 bg-usa/5">
+                                <div class="font-medium mb-2">资本操控与港口收购</div>
+                                <p class="text-gray-600">特朗普政府施压香港长和集团将巴拿马运河两端港口出售给美国贝莱德财团，以"国家安全"为由阻挠中资运营。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-china/5">
+                                <div class="font-medium mb-2">商业合规与资本退出</div>
+                                <p class="text-gray-600">中企遵守商业合同完成交易，长和集团以228亿美元向贝莱德出售全球43个港口（含巴拿马港口），未公开抗议。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-result/5">
+                                <div class="font-medium mb-2">航运成本增加</div>
+                                <p class="text-gray-600">贝莱德掌控全球10.4%集装箱吞吐量，形成对华航运钳制；中国货船未来可能面临美方高额停泊费，绕行成本增加。</p>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 bg-usa/5">
+                                <div class="font-medium mb-2">虚假宣传与舆论战</div>
+                                <p class="text-gray-600">美国国务院散布"中国控制运河""中方制定关闭运河预案"等谣言；特朗普宣称"美国军舰应免费通行"，煽动亲美舆论称"免费通行是美军保护的合理补偿"。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-china/5">
+                                <div class="font-medium mb-2">事实披露与国际声援</div>
+                                <p class="text-gray-600">巴拿马运河管理局（ACP）公开运河运营数据，证明收费透明且一视同仁；拉美媒体刊文《运河主权是反殖民胜利象征，美国勒索是历史倒退！》反击美方叙事。</p>
+                            </td>
+                            <td class="px-6 py-4 bg-result/5">
+                                <div class="font-medium mb-2">全球物流风险上升</div>
+                                <p class="text-gray-600">国际航运协会警告：美方行为或致全球物流成本飙升30%；巴拿马民众持续反美示威，捍卫主权共识强化。</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 国际态度拼图 -->
+    <section id="international" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-gray-800 mb-4">国际态度拼图</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">全球各方对巴拿马运河事件的立场和观点，反映了这一地缘政治事件的国际影响</p>
+            </div>
+
+            <!-- 拼图式布局 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- 拉美国家 -->
+                <div class="bg-blue-50 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-3 flex items-center">
+                            <i class="fa fa-globe-americas mr-2"></i> 拉美国家
+                        </h3>
+                        <p class="text-gray-600 mb-4">集体声援巴拿马，反对美国干预</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"巴拿马运河属于巴拿马人民，主权尊重是国际关系基本原则。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 墨西哥总统辛鲍姆</p>
+                        </div>
+                    </div>
+                    <div class="bg-blue-100 p-4">
+                        <div class="text-sm text-blue-700">哥伦比亚、智利、委内瑞拉等多国表态支持巴拿马主权</div>
+                    </div>
+                </div>
+
+                <!-- 国际组织 -->
+                <div class="bg-indigo-50 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-3 flex items-center">
+                            <i class="fa fa-university mr-2"></i> 国际组织
+                        </h3>
+                        <p class="text-gray-600 mb-4">谴责美国违反国际法</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"特朗普要求'免费通行'违反《巴拿马运河中立条约》，是对国际法规的粗暴践踏。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 国际问题专家伊戈纳西奥·马丁内斯</p>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-100 p-4">
+                        <div class="text-sm text-indigo-700">国际航运协会警告美方行为或致全球物流成本飙升30%</div>
+                    </div>
+                </div>
+
+                <!-- 巴拿马国内 -->
+                <div class="bg-emerald-50 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-emerald-800 mb-3 flex items-center">
+                            <i class="fa fa-users mr-2"></i> 巴拿马国内
+                        </h3>
+                        <p class="text-gray-600 mb-4">主权不容谈判，驳斥虚假指控</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"运河每一平方米都属于巴拿马，主权不容谈判。中国从未干预运河事务。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 巴拿马总统穆利诺</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-100 p-4">
+                        <div class="text-sm text-emerald-700">民众普遍视运河为"反殖民胜利象征"，主权争议激发民族主义情绪</div>
+                    </div>
+                </div>
+
+                <!-- 美国立场 -->
+                <div class="bg-usa/10 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-usa mb-3 flex items-center">
+                            <i class="fa fa-shield mr-2"></i> 美国立场
+                        </h3>
+                        <p class="text-gray-600 mb-4">霸权逻辑与单边施压</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"运河是美国重要国家资产，不排除用军事或经济手段收回控制权。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 特朗普政府</p>
+                        </div>
+                    </div>
+                    <div class="bg-usa/20 p-4">
+                        <div class="text-sm text-usa">国内舆论存在分歧，亲美派支持免费通行，部分媒体警告单边行动风险</div>
+                    </div>
+                </div>
+
+                <!-- 中国表态 -->
+                <div class="bg-china/10 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-china mb-3 flex items-center">
+                            <i class="fa fa-handshake-o mr-2"></i> 中国表态
+                        </h3>
+                        <p class="text-gray-600 mb-4">尊重主权，澄清参与范围</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"中方尊重巴拿马运河主权和中立原则，从未参与管理运营，合作限于商业港口投资。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 外交部发言人毛宁</p>
+                        </div>
+                    </div>
+                    <div class="bg-china/20 p-4">
+                        <div class="text-sm text-china">中企遵守商业规则完成港口交易，未公开抗议</div>
+                    </div>
+                </div>
+
+                <!-- 其他相关方 -->
+                <div class="bg-purple-50 rounded-xl overflow-hidden shadow-md hover-scale">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-3 flex items-center">
+                            <i class="fa fa-globe mr-2"></i> 其他相关方
+                        </h3>
+                        <p class="text-gray-600 mb-4">各方反应</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-sm italic">"美方行为将破坏全球航运秩序，可能导致物流成本大幅上升。"</p>
+                            <p class="text-xs text-gray-500 mt-2">—— 国际航运协会</p>
+                        </div>
+                    </div>
+                    <div class="bg-purple-100 p-4">
+                        <div class="text-sm text-purple-700">加拿大、格陵兰岛等国对美国相关言论表达不满</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 声援地图示意 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow-lg" data-viz="support-map">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">国际声援地图</h3>
+                <div class="h-[400px] relative">
+                    <canvas id="supportMap"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 影响与展望 -->
+    <section id="impact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-gray-800 mb-4">影响与展望</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">分析巴拿马运河事件对全球政治、经济和航运格局的影响，以及未来可能的发展趋势</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-scale">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-chart-line text-green-600 mr-2"></i> 经济影响
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-green-600 mt-1.5 mr-2"></i>
+                            <span>巴拿马运河收入占该国GDP的4%，美国施压可能导致其年财政损失约2.47亿美元</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-green-600 mt-1.5 mr-2"></i>
+                            <span>全球物流成本可能因运河通行政策变化上升30%，影响国际贸易效率</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-green-600 mt-1.5 mr-2"></i>
+                            <span>中资企业在巴拿马的投资项目受到冲击，香港和记黄埔出售港口资产</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-green-600 mt-1.5 mr-2"></i>
+                            <span>美国贝莱德财团通过收购扩大其在全球航运业的影响力</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 hover-scale">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-globe text-blue-600 mr-2"></i> 政治影响
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-blue-600 mt-1.5 mr-2"></i>
+                            <span>美国单边主义行为引发国际社会批评，损害其国际形象和信誉</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-blue-600 mt-1.5 mr-2"></i>
+                            <span>巴拿马国内民族主义情绪上升，民众对主权问题的关注度提高</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-blue-600 mt-1.5 mr-2"></i>
+                            <span>拉美国家团结意识增强，共同抵制外部干涉</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-circle text-xs text-blue-600 mt-1.5 mr-2"></i>
+                            <span>中美在拉美地区的影响力竞争进一步加剧</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fa fa-compass text-amber-600 mr-2"></i> 未来展望
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-amber-700 mb-3">短期趋势</h4>
+                        <p class="text-gray-600">巴拿马可能会在美国压力下继续调整与中国的合作关系，但会努力维护运河的中立性和自身主权。美国可能会进一步施加经济和外交压力，试图巩固其在运河地区的影响力。</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-amber-700 mb-3">中期趋势</h4>
+                        <p class="text-gray-600">国际社会可能会加强对运河问题的关注，推动通过多边机制解决争端。巴拿马可能会寻求多元化的国际合作，减少对单一国家的依赖。气候变化导致的干旱问题可能持续影响运河运营。</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-amber-700 mb-3">长期趋势</h4>
+                        <p class="text-gray-600">运河的战略重要性可能会因新航道的开发（如北极航道）而有所下降，但仍将是连接两大洋的重要通道。中美在拉美地区的竞争可能会促使双方寻求更平衡的合作方式。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">专家观点</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6 perspective">
+                        <div class="flip-card">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front flex flex-col items-center justify-center">
+                                    <div class="w-20 h-20 rounded-full bg-gray-200 mb-4 overflow-hidden">
+                                        <img src="https://picsum.photos/id/1005/200/200" alt="国际政治专家" class="w-full h-full object-cover">
+                                    </div>
+                                    <h4 class="font-semibold text-lg">卡洛斯·罗德里格斯</h4>
+                                    <p class="text-gray-500 text-sm">国际政治专家</p>
+                                </div>
+                                <div class="flip-card-back flex flex-col justify-center">
+                                    <p class="text-gray-600 text-sm">"美国在巴拿马运河问题上的单边主义行为违背了国际法和多边合作原则，可能会进一步削弱其在拉美地区的软实力。巴拿马需要在维护主权和平衡大国关系之间找到微妙的平衡点。"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 perspective">
+                        <div class="flip-card">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front flex flex-col items-center justify-center">
+                                    <div class="w-20 h-20 rounded-full bg-gray-200 mb-4 overflow-hidden">
+                                        <img src="https://picsum.photos/id/1000/200/200" alt="国际贸易专家" class="w-full h-full object-cover">
+                                    </div>
+                                    <h4 class="font-semibold text-lg">玛丽亚·张</h4>
+                                    <p class="text-gray-500 text-sm">国际贸易专家</p>
+                                </div>
+                                <div class="flip-card-back flex flex-col justify-center">
+                                    <p class="text-gray-600 text-sm">"运河通行政策的变化将对全球供应链产生重大影响，特别是对依赖巴拿马运河的美洲和亚洲贸易。企业需要重新评估其物流策略，考虑增加对其他航道的利用。"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 perspective">
+                        <div class="flip-card">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front flex flex-col items-center justify-center">
+                                    <div class="w-20 h-20 rounded-full bg-gray-200 mb-4 overflow-hidden">
+                                        <img src="https://picsum.photos/id/1001/200/200" alt="拉美研究学者" class="w-full h-full object-cover">
+                                    </div>
+                                    <h4 class="font-semibold text-lg">胡安·佩雷斯</h4>
+                                    <p class="text-gray-500 text-sm">拉美研究学者</p>
+                                </div>
+                                <div class="flip-card-back flex flex-col justify-center">
+                                    <p class="text-gray-600 text-sm">"巴拿马运河事件再次凸显了拉美国家在大国博弈中的脆弱地位。地区国家需要加强团结，通过集体行动维护自身利益，减少外部干涉的风险。"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">巴拿马运河事件专题</h3>
+                    <p class="text-gray-400 mb-4">本专题网站提供了关于巴拿马运河事件的全面报道和分析，包括事件时间线、双方对峙分析和国际社会的反应。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-youtube-play"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#timeline" class="text-gray-400 hover:text-white transition-colors">事件时间线</a></li>
+                        <li><a href="#confrontation" class="text-gray-400 hover:text-white transition-colors">双方对峙分析</a></li>
+                        <li><a href="#international" class="text-gray-400 hover:text-white transition-colors">国际态度拼图</a></li>
+                        <li><a href="#impact" class="text-gray-400 hover:text-white transition-colors">影响与展望</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">获取更新</h3>
+                    <p class="text-gray-400 mb-4">订阅我们的新闻简报，获取巴拿马运河事件的最新动态和分析。</p>
+                    <form class="flex">
+                        <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800">
+                        <button type="submit" class="bg-canal hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
+                            订阅
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+                <p>© 2025 巴拿马运河事件专题网站. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2', 'shadow-lg');
+                header.classList.remove('py-3', 'shadow-md');
+            } else {
+                header.classList.add('py-3', 'shadow-md');
+                header.classList.remove('py-2', 'shadow-lg');
+            }
+        });
+
+        // 信息卡片展开/收起功能
+        document.querySelectorAll('.info-card button').forEach(button => {
+            button.addEventListener('click', function() {
+                const parent = this.closest('.info-card');
+                const detailsClass = this.parentElement.className.includes('political') ? 'political-details' : 
+                                    this.parentElement.className.includes('economic') ? 'economic-details' : 'ecological-details';
+                const detailsElement = parent.querySelector(`.${detailsClass}`);
+                const icon = this.querySelector('i');
+                
+                if (detailsElement.classList.contains('hidden')) {
+                    detailsElement.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                } else {
+                    detailsElement.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+                }
+            });
+        });
+
+        // 表格排序功能
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', function() {
+                const table = this.closest('table');
+                const rows = Array.from(table.querySelectorAll('tbody tr'));
+                const columnIndex = Array.from(this.parentElement.children).indexOf(this);
+                const sortDirection = this.getAttribute('data-sort-direction') === 'asc' ? 'desc' : 'asc';
+                
+                // 重置所有表头的排序图标
+                document.querySelectorAll('th[data-sort] i').forEach(icon => {
+                    icon.className = 'fa fa-sort ml-1';
+                });
+                
+                // 设置当前表头的排序图标
+                this.querySelector('i').className = sortDirection === 'asc' ? 'fa fa-sort-asc ml-1' : 'fa fa-sort-desc ml-1';
+                this.setAttribute('data-sort-direction', sortDirection);
+                
+                // 排序行
+                rows.sort((a, b) => {
+                    const aValue = a.querySelectorAll('td')[columnIndex].textContent.trim().toLowerCase();
+                    const bValue = b.querySelectorAll('td')[columnIndex].textContent.trim().toLowerCase();
+                    
+                    if (sortDirection === 'asc') {
+                        return aValue.localeCompare(bValue);
+                    } else {
+                        return bValue.localeCompare(aValue);
+                    }
+                });
+                
+                // 重新添加排序后的行
+                const tbody = table.querySelector('tbody');
+                tbody.innerHTML = '';
+                rows.forEach(row => tbody.appendChild(row));
+                
+                // 添加行悬停效果
+                rows.forEach(row => {
+                    row.classList.add('hover:bg-gray-50', 'transition-colors');
+                });
+            });
+        });
+
+        // 声援地图图表
+        window.addEventListener('load', function() {
+            const ctx = document.getElementById('supportMap').getContext('2d');
+            
+            const supportMap = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['支持巴拿马', '支持美国', '中立', '未表态'],
+                    datasets: [{
+                        data: [65, 20, 10, 5],
+                        backgroundColor: [
+                            '#1E40AF', // 支持巴拿马 - 蓝色
+                            '#D81F26', // 支持美国 - 红色
+                            '#6B7280', // 中立 - 灰色
+                            '#E5E7EB'  // 未表态 - 浅灰色
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 事件标记点弹出详情
+        document.querySelectorAll('.timeline-dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const eventType = this.getAttribute('data-event');
+                let eventDetails = '';
+                
+                // 根据不同事件类型设置详情内容
+                switch(eventType) {
+                    case 'background':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">运河主权争端背景</h3>
+                                <p class="text-gray-700 mb-4">巴拿马运河作为连接太平洋与大西洋的全球战略水道，每年承载着全球约6%的海上贸易，其中美国集装箱运输量的40%依赖该运河。</p>
+                                <p class="text-gray-700">历史上，美国曾于1903-1999年控制巴拿马运河，1999年主权移交巴拿马后，美国仍保持强大影响力。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'cooperation-2017':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">2017年中巴合作</h3>
+                                <p class="text-gray-700 mb-4">2017年，巴拿马与中国签署"一带一路"合作备忘录，中资企业参与运河两端港口建设，如香港和记黄埔运营大西洋侧科隆集装箱港口。</p>
+                                <p class="text-gray-700">这一合作却成为美国攻击的靶心，美方开始散布"中国威胁"论，试图破坏中巴合作。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'pressure-2024':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">2024年美国施压</h3>
+                                <p class="text-gray-700 mb-4">2024年11月，特朗普胜选后多次宣称"美国应收回运河控制权"，引发国际社会关注。</p>
+                                <p class="text-gray-700">2025年1月30日，美国国务卿鲁比奥散布"中国可在战争时关闭运河"的谣言，声称中资港口运营构成"美国国家安全威胁"，完全无视运河中立的国际法地位。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'termination-2025':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">2025年终止协议</h3>
+                                <p class="text-gray-700 mb-4">2025年2月3日，在美方压力下，巴拿马宣布不再续签"一带一路"备忘录（原协议2027-2028年到期）。</p>
+                                <p class="text-gray-700">2025年4月26日，特朗普发帖要求美国军舰商船免费通行运河，遭巴总统穆利诺严正拒绝。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'economic-impact':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">经济影响</h3>
+                                <p class="text-gray-700 mb-4">若美国免费通行实施，巴拿马年财政损失将达2.47亿美元，占其GDP的4%。</p>
+                                <p class="text-gray-700">2023年起的厄尔尼诺现象导致干旱，运河通行量减少40%，预计2024年收入再降2亿美元，凸显气候变化与地缘博弈双重打击。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'international-response':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">国际响应</h3>
+                                <p class="text-gray-700 mb-4">墨西哥总统辛鲍姆明确表态"巴拿马运河属于巴拿马人民"，哥伦比亚等拉美国家也声援巴拿马。</p>
+                                <p class="text-gray-700">国际组织如国际航运协会警告，美方行为可能导致全球物流成本飙升30%。</p>
+                            </div>
+                        `;
+                        break;
+                    case 'future':
+                        eventDetails = `
+                            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto transform transition-all duration-300 hover:shadow-2xl">
+                                <h3 class="text-xl font-bold text-canal mb-3">未来展望</h3>
+                                <p class="text-gray-700 mb-4">巴拿马需要在维护主权和平衡大国关系之间找到平衡点，国际社会呼吁通过多边机制解决争端。</p>
+                                <p class="text-gray-700">气候变化导致的干旱问题可能持续影响运河运营，需要国际社会共同应对。</p>
+                            </div>
+                        `;
+                        break;
+                }
+                
+                // 创建弹出层
+                const popup = document.createElement('div');
+                popup.className = 'fixed inset-0 flex items-center justify-center z-50 bg-black/50 p-4';
+                popup.innerHTML = `
+                    <div class="relative w-full">
+                        ${eventDetails}
+                        <button class="absolute -top-2 -right-2 bg-gray-200 hover:bg-gray-300 text-gray-800 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // 添加到页面
+                document.body.appendChild(popup);
+                
+                // 关闭按钮事件
+                popup.querySelector('button').addEventListener('click', function() {
+                    popup.remove();
+                });
+                
+                // 点击背景关闭
+                popup.addEventListener('click', function(e) {
+                    if (e.target === popup) {
+                        popup.remove();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+    

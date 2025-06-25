@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>达尔文港：契约精神遭遇地缘政治寒流</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1a365d',
+            secondary: '#f59e0b',
+            china: '#22c55e',
+            australia: '#ef4444',
+            neutral: '#f3f4f6',
+            dark: '#1f2937'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.8s ease-in-out forwards;
+      }
+      .animate-slide-up {
+        animation: slideUp 0.8s ease-out forwards;
+      }
+      .animate-pulse-slow {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .timeline-item {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .timeline-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .danmaku {
+        position: absolute;
+        white-space: nowrap;
+        animation: danmaku 15s linear infinite;
+        background-color: rgba(0,0,0,0.6);
+        padding: 6px 12px;
+        border-radius: 20px;
+        color: white;
+        font-size: 14px;
+        z-index: 10;
+      }
+      .cracked {
+        animation: crack 0.8s forwards;
+        pointer-events: none;
+      }
+      .timeline-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out;
+      }
+      .timeline-content.expanded {
+        max-height: 500px;
+      }
+      .timeline-toggle {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      .timeline-toggle.expanded {
+        transform: rotate(180deg);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes danmaku {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+    
+    @keyframes crack {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    
+    /* 地图动画样式 */
+    .map-container {
+      position: relative;
+      overflow: hidden;
+      height: 400px;
+    }
+    
+    .map-zoom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://picsum.photos/1200/800');
+      background-size: 200% 200%;
+      background-position: center;
+      animation: mapZoom 8s ease-in-out forwards;
+    }
+    
+    @keyframes mapZoom {
+      0% { background-size: 200% 200%; }
+      100% { background-size: 1000% 1000%; background-position: 75% 40%; }
+    }
+    
+    /* 港口渐变对比图 */
+    .port-comparison {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+    
+    .port-before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://picsum.photos/800/400?grayscale');
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(100%) brightness(0.7);
+      z-index: 1;
+    }
+    
+    .port-after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background-image: url('https://picsum.photos/800/400');
+      background-size: cover;
+      background-position: center;
+      z-index: 2;
+      transition: width 2s ease-in-out;
+    }
+    
+    .port-comparison:hover .port-after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="font-sans text-dark bg-neutral">
+  <!-- 导航栏 -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-primary/90 text-white shadow-lg transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-globe text-secondary text-xl"></i>
+        <span class="font-bold text-xl">地缘观察</span>
+      </div>
+      <div class="hidden md:flex space-x-8">
+        <a href="#intro" class="hover:text-secondary transition-colors">事件介绍</a>
+        <a href="#timeline" class="hover:text-secondary transition-colors">对峙时间线</a>
+        <a href="#views" class="hover:text-secondary transition-colors">各方观点</a>
+      </div>
+      <button class="md:hidden text-xl">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 事件介绍部分 -->
+  <section id="intro" class="pt-24 pb-16 bg-gradient-to-b from-primary to-dark">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <!-- 世界地图动画 -->
+        <div class="map-container rounded-xl overflow-hidden shadow-2xl">
+          <div class="map-zoom"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4 text-white text-center">
+            <div class="animate-fade-in opacity-0" style="animation-delay: 1s;">
+              <i class="fa fa-map-marker text-secondary text-3xl mb-2"></i>
+              <h3 class="text-xl font-bold">达尔文港</h3>
+              <p class="text-sm opacity-80">澳大利亚北领地</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 标题和简介 -->
+        <div class="text-white space-y-6">
+          <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-shadow">
+            达尔文港：<br>
+            <span class="text-secondary">契约精神遭遇地缘政治寒流</span>
+          </h1>
+          <div class="space-y-4 text-lg">
+            <p class="animate-fade-in opacity-0" style="animation-delay: 1.5s;">
+              2025年5月，澳大利亚官员旧事重提，以所谓"安全风险"为由，威胁要从中国岚桥集团处收回北部达尔文港的经营权。
+            </p>
+            <p class="animate-fade-in opacity-0" style="animation-delay: 2s;">
+              这一争议源于2015年澳大利亚北领地政府与岚桥集团的租赁协议，该协议赋予岚桥集团99年港口经营权。
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 事件说明文字 -->
+      <div class="mt-12 bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg animate-slide-up opacity-0" style="animation-delay: 2.5s;">
+        <div class="flex items-start space-x-4">
+          <div class="text-secondary text-3xl mt-1">
+            <i class="fa fa-info-circle"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-3">事件背景</h3>
+            <p class="text-white/90 leading-relaxed">
+              达尔文港位于澳大利亚北领地，是该国最接近亚洲的港口之一，具有重要的战略和经济地位。2015年，澳大利亚北领地政府因财政压力，通过公开竞标将达尔文港99年租赁权以5.06亿澳元授予中国岚桥集团。岚桥集团接手后，投入大量资金对港口进行升级改造，使港口从亏损转为连续8年盈利，并成为连接亚洲市场的黄金贸易枢纽。然而近年来，随着地缘政治局势变化，这一商业合作逐渐被政治化。
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 图片占位 -->
+      <div class="mt-10 data-video-placeholder rounded-xl overflow-hidden shadow-xl relative h-64 md:h-80" id="darwin-intro">
+        <div class="absolute inset-0 bg-primary/60 flex items-center justify-center">
+          <div class="text-center text-white">
+            <i class="fa fa-play-circle text-5xl mb-3 text-secondary animate-pulse-slow"></i>
+            <p>点击播放：达尔文港介绍</p>
+          </div>
+        </div>
+        <img src="https://picsum.photos/1200/600" alt="达尔文港全景" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </section>
+
+  <!-- 双方对峙时间线 -->
+  <section id="timeline" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary">
+          <span class="inline-block border-b-4 border-secondary pb-2">双方对峙时间线</span>
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+          从2015年租赁协议签署至今，中澳双方围绕达尔文港经营权的争议与博弈
+        </p>
+      </div>
+      
+      <!-- 垂直时间线 -->
+      <div class="relative max-w-4xl mx-auto">
+        <!-- 金色分隔线 -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-secondary/60 rounded"></div>
+        
+        <!-- 时间线项目 -->
+        <div class="space-y-12 relative">
+          <!-- 2015年 -->
+          <div class="timeline-item">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+                <div class="bg-china/10 border-l-4 border-china p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-china font-bold">中方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">岚桥集团获得达尔文港经营权</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      澳大利亚北领地政府因财政压力，通过公开竞标将达尔文港99年租赁权以5.06亿澳元授予中国岚桥集团，岚桥集团由此获得达尔文东臂港土地和设备80%的所有权，并承诺追加2亿澳元用于基础设施升级。
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary rounded-full border-4 border-white z-10 order-1 md:order-2"></div>
+              <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0 order-3">
+                <div class="bg-australia/10 border-l-4 border-australia p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-australia font-bold">澳方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">时任美国总统奥巴马"关切"</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      美方对澳大利亚将达尔文港租赁给中国企业表示关切，这标志着该交易开始受到国际政治关注。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 后续升级改造 -->
+          <div class="timeline-item">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+                <div class="bg-china/10 border-l-4 border-china p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-china font-bold">中方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">港口升级改造与繁荣发展</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      岚桥集团接手后，开始投入大量资金对达尔文港进行升级改造，构建了"澳大利亚-东南亚-中国"大宗物资运输走廊，将年吞吐量从不足500万吨提升至3000万吨，使港口从亏损转为连续8年盈利，使到港船舶总吨位（GRT）大幅增长95.7%，推动港口成为连接亚洲市场的黄金贸易枢纽和澳大利亚北领地唯一大型基建项目。
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary rounded-full border-4 border-white z-10 order-1 md:order-2"></div>
+              <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0 order-3">
+                <div class="bg-australia/10 border-l-4 border-australia p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-australia font-bold">澳方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">多次审查与美方施压</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      美方多次施压澳大利亚重新评估中国与澳大利亚之间的租约。澳大利亚亦通过援引2018年的《关键基础设施安全法案》（2021年12月修订）、2020年的《对外关系法》和2021年新修订的《外国投资法》尝试收回港口经营权，但多次安全审查的结果均确认"无实际风险"，导致澳方始终未采取行动。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 2024年 -->
+          <div class="timeline-item">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+                <div class="bg-china/10 border-l-4 border-china p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-china font-bold">中方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">达尔文港成为经济支柱</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      达尔文港承担澳大利亚对华出口的23%货运量，贡献了澳大利亚北领地GDP的12%，成为该地区经济发展的重要引擎。
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary rounded-full border-4 border-white z-10 order-1 md:order-2"></div>
+              <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0 order-3">
+                <div class="bg-australia/10 border-l-4 border-australia p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-australia font-bold">澳方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">美军扩建军事设施</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      美军在达尔文港附近扩建军事设施（如燃料库、雷达站等），并将达尔文港一同纳入其印太战略。美军去年7月被曝已悄然开始在澳大利亚北部地区投入数亿美元建设军事设施，用于支持B-52战略轰炸机、F-22隐形战斗机等的部署。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 2025年5月 -->
+          <div class="timeline-item">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+                <div class="bg-china/10 border-l-4 border-china p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-china font-bold">中方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">中方严正回应</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      5月22日中国驻澳大利亚肖千大使在北领地首府达尔文接受澳大利亚广播公司、新华社、凤凰卫视采访时对此事进行回应称"这在道义上是欠妥的"。5月27日，中国外交部发言人毛宁在例行记者会上就此事回应称"有关中国企业是通过市场方式获得达尔文港的租约，其合法权益应当受到充分的保护"。岚桥集团澳大利亚非执行董事特里·奥康纳回应称"我们无意出售达尔文港，也没有与任何一方就此进行谈判。任何接触都未发生…这是一个具有法律效力的长期合同，任何试图更改或终止合同的举措，都必须建立在法律之上"。
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary rounded-full border-4 border-white z-10 order-1 md:order-2"></div>
+              <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0 order-3">
+                <div class="bg-australia/10 border-l-4 border-australia p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-australia font-bold">澳方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">澳方欲收回经营权</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      2025年澳大利亚大选期间，工党与联盟党均宣称要收回达尔文港的经营权。今年5月23日，成功连任澳大利亚总理的工党领袖阿尔巴尼斯在接受ABC达尔文电台采访时公开表示政府目前已与潜在买家进行了非正式谈判，并准备启动相关回购计划。5月26日，《澳洲人报》报道称总部位于纽约的美国私募股权公司博龙资产管理（Cerberus Capital Management）正计划出价收购该租约，出价略高于岚桥十年前的购入价。5月31日澳大利亚国防部长理查德·马尔斯表示，澳大利亚政府一直反对中国在达尔文港的经营权，寻找新买家的行为并未受到美国总统特朗普政府的额外压力。马尔斯在香格里拉对话会间隙接受彭博社采访时声称，将这一基础设施交给中国国企不合适。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 法律行动 -->
+          <div class="timeline-item">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+                <div class="bg-china/10 border-l-4 border-china p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-china font-bold">中方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">启动国际仲裁程序</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      岚桥集团自身已启动国际商会仲裁院预备仲裁程序，要求澳方在违约时支付20年预期收益赔偿金（约200亿澳元），以维护自身合法权益。
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-secondary rounded-full border-4 border-white z-10 order-1 md:order-2"></div>
+              <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0 order-3">
+                <div class="bg-australia/10 border-l-4 border-australia p-6 rounded-r-lg shadow-md hover:shadow-lg transition-shadow timeline-card">
+                  <div class="flex justify-between items-center">
+                    <span class="text-australia font-bold">澳方行为</span>
+                    <i class="fa fa-chevron-down text-gray-500 timeline-toggle"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mt-2">坚持政治操弄</h3>
+                  <div class="timeline-content">
+                    <p class="mt-3 text-gray-700">
+                      澳大利亚政府继续以"国家安全"为由，推进收回达尔文港经营权的计划，无视多次审查结果及商业契约精神。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 底部对比图 -->
+      <div class="mt-20 port-comparison rounded-xl overflow-hidden shadow-xl">
+        <div class="port-before"></div>
+        <div class="port-after"></div>
+        <div class="absolute inset-0 flex items-center justify-center z-30">
+          <div class="bg-dark/70 text-white px-6 py-3 rounded-full backdrop-blur-sm">
+            <i class="fa fa-exchange mr-2"></i> 点击查看港口前后对比
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 各方观点弹幕 -->
+  <section id="views" class="py-20 bg-gray-100 relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-primary">
+          <span class="inline-block border-b-4 border-secondary pb-2">各方观点</span>
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+          国际社会对达尔文港事件的不同声音与立场
+        </p>
+      </div>
+      
+      <!-- 安全风险破碎互动效果 -->
+      <div class="text-center mb-12">
+        <h3 class="text-[clamp(2rem,5vw,3rem)] font-bold text-primary" id="security-risk">
+          安全风险
+        </h3>
+        <p class="mt-4 text-gray-600">
+          点击上方文字，见证"安全风险"这一借口的破碎
+        </p>
+      </div>
+      
+      <!-- 弹幕容器 -->
+      <div class="relative h-[500px] rounded-xl overflow-hidden shadow-xl data-bg" id="darwin-panorama">
+        <img src="https://picsum.photos/1600/900" alt="达尔文港全景" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-primary/40"></div>
+        <div id="danmaku-container" class="absolute inset-0 overflow-hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-primary text-white py-10">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center space-x-2">
+            <i class="fa fa-globe text-secondary text-xl"></i>
+            <span class="font-bold text-xl">地缘观察</span>
+          </div>
+          <p class="mt-2 text-gray-300">聚焦全球地缘政治热点</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-300 hover:text-secondary transition-colors">
+            <i class="fa fa-twitter text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-300 hover:text-secondary transition-colors">
+            <i class="fa fa-facebook text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-300 hover:text-secondary transition-colors">
+            <i class="fa fa-linkedin text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-300 hover:text-secondary transition-colors">
+            <i class="fa fa-youtube-play text-xl"></i>
+          </a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+        <p>© 2025 地缘观察. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 100) {
+        navbar.classList.add('py-2');
+        navbar.classList.remove('py-3');
+        navbar.classList.add('bg-primary');
+        navbar.classList.remove('bg-primary/90');
+      } else {
+        navbar.classList.add('py-3');
+        navbar.classList.remove('py-2');
+        navbar.classList.add('bg-primary/90');
+        navbar.classList.remove('bg-primary');
+      }
+    });
+    
+    // 时间线动画
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    function checkTimelineItems() {
+      const triggerBottom = window.innerHeight * 0.8;
+      
+      timelineItems.forEach(item => {
+        const itemTop = item.getBoundingClientRect().top;
+        
+        if (itemTop < triggerBottom) {
+          item.classList.add('visible');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', checkTimelineItems);
+    checkTimelineItems(); // 初始检查
+    
+    // 港口对比图交互
+    const portComparison = document.querySelector('.port-comparison');
+    portComparison.addEventListener('click', function() {
+      this.querySelector('.port-after').style.width = '100%';
+    });
+    
+    // 视频占位符点击效果
+    const videoPlaceholder = document.getElementById('darwin-intro');
+    videoPlaceholder.addEventListener('click', function() {
+      this.querySelector('div').style.display = 'none';
+    });
+    
+    // 弹幕系统
+    const danmakuContainer = document.getElementById('danmaku-container');
+    const danmakuTexts = [
+      '澳前总理特恩布尔："今时不同往日了"（times have changed）。特恩布尔为澳大利亚执政党和反对党试图"毁约"一事做辩护，声称"应面对现实，因为一家澳大利亚公司现在也无法收购中国港口设施的一部分"。',
+      '5月获得连任的澳总理阿尔巴尼斯称，希望达尔文港回到"澳大利亚人手中"，甚至放话如果找不到买家，也愿意将达尔文港国有化。',
+      '5月26日，岚桥澳大利亚非执行董事特里·奥康纳表示，在他看来，这是澳大利亚政客的再一次政治操弄。"坦白说，我认为这又是一次选举前后常见的"政治足球比赛"而已。"',
+      '5月27日，针对美国私募基金博龙资本拟竞购达尔文港一事，外交部发言人毛宁在例行发布会上应询表示，有关的中国企业是通过市场方式获得达尔文港的租约，其合法权益应当受到充分的保护。',
+      '4月7日，外交部发言人林剑在主持例行记者会上强调，我们敦促澳方切实为中国企业在澳投资运营提供公平、非歧视、可预期的营商环境，不要泛化国家安全概念，不要把正常的商业合作政治化。',
+      '澳大利亚北领地财政局长比尔·杨曾坦言，如果当时没有中国投资，港口可能在三年内破产。',
+      '2023年10月，澳大利亚总理及内阁部10月20日发布声明称，已完成对该国北部达尔文港租赁情况的审查，认为没有必要更改或取消租约，因为"有健全的监管体系来管理关键基础设施的风险"。',
+      '2024年11月28日，澳大利亚北领地国库部长Bill Yan当地时间11月27日表示，他已致信岚桥集团，要求其提供"有关财务状况的进一步信息"。"我们的首要任务是确保达尔文港在其长期未来确定的情况下保持运营，"Yan在一份声明中说。"北领地正在重新审视我们的权益，未来的行动将以北领地民众的最大利益为出发点。"',
+      '澳媒《悉尼先驱晨报》痛批"政府正在摧毁国际投资者对澳大利亚的最后信任"',
+      '国际法律专家：单方面撕毁合同将严重损害澳大利亚的国际信誉和投资环境。',
+      '商业分析师：达尔文港的成功证明了中澳经济合作的互补性和潜力。',
+      '地缘政治学者：达尔文港争议是大国博弈背景下，商业合作政治化的典型案例。'
+    ];
+    
+    function createDanmaku() {
+      const text = danmakuTexts[Math.floor(Math.random() * danmakuTexts.length)];
+      const danmaku = document.createElement('div');
+      danmaku.className = 'danmaku';
+      danmaku.textContent = text;
+      
+      // 随机垂直位置
+      const top = Math.floor(Math.random() * 80) + 5;
+      danmaku.style.top = `${top}%`;
+      
+      // 随机动画速度
+      const duration = Math.floor(Math.random() * 10) + 15;
+      danmaku.style.animationDuration = `${duration}s`;
+      
+      // 随机颜色
+      const colors = ['white', 'yellow', 'cyan', 'pink', 'lime'];
+      danmaku.style.color = colors[Math.floor(Math.random() * colors.length)];
+      
+      danmakuContainer.appendChild(danmaku);
+      
+      // 动画结束后移除
+      setTimeout(() => {
+        danmaku.remove();
+      }, duration * 1000);
+    }
+    
+    // 定期创建弹幕
+    setInterval(createDanmaku, 2000);
+    
+    // 安全风险破碎互动效果
+    const securityRisk = document.getElementById('security-risk');
+    securityRisk.addEventListener('click', function() {
+      this.classList.add('cracked');
+      
+      // 破碎后显示真相
+      setTimeout(() => {
+        this.textContent = '商业合作';
+        this.classList.remove('cracked');
+        this.classList.add('text-china');
+      }, 1000);
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 时间线卡片点击展开/折叠功能
+    const timelineCards = document.querySelectorAll('.timeline-card');
+    
+    timelineCards.forEach(card => {
+      const toggle = card.querySelector('.timeline-toggle');
+      const content = card.querySelector('.timeline-content');
+      
+      // 默认展开第一个时间线项目
+      if (card === timelineCards[0]) {
+        content.classList.add('expanded');
+        toggle.classList.add('expanded');
+      }
+      
+      card.addEventListener('click', function() {
+        content.classList.toggle('expanded');
+        toggle.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>  

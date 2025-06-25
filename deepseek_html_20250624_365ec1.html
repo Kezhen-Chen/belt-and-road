@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>达尔文港事件 - 一带一路专题</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-secondary: #FFD700;
+            --green-china: #2ecc71;
+            --red-australia: #e74c3c;
+            --blue-dark: #1E3A8A;
+            --blue-light: #3498db;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c2461, #1e3799);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 事件介绍部分 */
+        .event-intro {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 80px;
+            padding: 40px;
+            background: rgba(30, 58, 138, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid var(--gold-primary);
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            min-height: 500px;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .world-map {
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1534239143101-1b1c627395c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+            position: absolute;
+            transition: all 6s ease-in-out;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .map-overlay.active {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .map-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 10px rgba(212, 175, 55, 0.3);
+            opacity: 0;
+            transition: opacity 1s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .map-marker.active {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .intro-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            color: var(--gold-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--gold-primary), transparent);
+            border-radius: 2px;
+        }
+
+        .event-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: var(--text-light);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 250px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed var(--gold-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            color: var(--gold-primary);
+        }
+
+        /* 时间线部分 */
+        .timeline-section {
+            position: relative;
+            margin-bottom: 100px;
+            padding: 40px;
+            background: rgba(30, 58, 138, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid var(--gold-primary);
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: var(--gold-primary);
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .timeline-items {
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item.china {
+            justify-content: flex-end;
+        }
+
+        .timeline-item.australia {
+            justify-content: flex-start;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .timeline-content.china {
+            background: linear-gradient(135deg, var(--green-china), #27ae60);
+            text-align: right;
+        }
+
+        .timeline-content.australia {
+            background: linear-gradient(135deg, var(--red-australia), #c0392b);
+        }
+
+        .timeline-year {
+            position: absolute;
+            top: -25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 30px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .timeline-year.china {
+            right: 0;
+            background: var(--green-china);
+        }
+
+        .timeline-year.australia {
+            left: 0;
+            background: var(--red-australia);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .timeline-content p {
+            line-height: 1.6;
+        }
+
+        .port-comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        .port-image {
+            width: 48%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .port-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.8s ease;
+        }
+
+        .port-label {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .old-port {
+            filter: grayscale(100%);
+        }
+
+        .new-port {
+            filter: saturate(150%);
+        }
+
+        /* 弹幕部分 */
+        .barrage-section {
+            height: 600px;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: rgba(30, 58, 138, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid var(--gold-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .barrage-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1549923746-c502d488b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .barrage-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .barrage-item {
+            position: absolute;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: barrageMove linear forwards;
+            z-index: 2;
+        }
+
+        .barrage-item.china {
+            background: rgba(46, 204, 113, 0.8);
+        }
+
+        .barrage-item.australia {
+            background: rgba(231, 76, 60, 0.8);
+        }
+
+        .barrage-item.media {
+            background: rgba(52, 152, 219, 0.8);
+        }
+
+        @keyframes barrageMove {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        .risk-section {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .risk-title {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #e74c3c;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .risk-title:hover {
+            transform: scale(1.05);
+        }
+
+        .shatter-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .shatter-piece {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: shatter 1.5s forwards;
+        }
+
+        @keyframes shatter {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) rotate(var(--r));
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .event-intro {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                min-height: 400px;
+            }
+            
+            .timeline-content {
+                width: 90%;
+            }
+            
+            .port-comparison {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .port-image {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .event-intro, .timeline-section, .barrage-section {
+                padding: 25px;
+            }
+            
+            .timeline-line {
+                left: 30px;
+            }
+            
+            .timeline-item.china {
+                justify-content: flex-start;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+            
+            .timeline-year.china {
+                left: 0;
+                right: auto;
+            }
+            
+            .risk-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .event-description {
+                font-size: 1rem;
+            }
+            
+            .timeline-content h3 {
+                font-size: 1.2rem;
+            }
+            
+            .timeline-content p {
+                font-size: 0.9rem;
+            }
+            
+            .risk-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 事件介绍部分 -->
+        <section class="event-intro">
+            <div class="map-container">
+                <div class="world-map" id="worldMap"></div>
+                <div class="map-overlay" id="mapOverlay">
+                    <h2>聚焦澳大利亚达尔文港</h2>
+                </div>
+                <div class="map-marker" id="mapMarker"></div>
+            </div>
+            <div class="intro-content">
+                <h2 class="section-title">达尔文港：契约精神遭遇地缘政治寒流</h2>
+                <p class="event-description">
+                    2025年5月，澳大利亚官员旧事重提，以所谓"安全风险"为由，威胁要从中国岚桥集团处收回北部达尔文港的经营权。这一事件是西方势力系统性打压"一带一路"倡议的典型案例，凸显了国际商业合作面临的地缘政治挑战。
+                </p>
+                <p class="event-description">
+                    自2015年岚桥集团获得达尔文港99年租赁权以来，该港口已成为中澳经贸合作的重要枢纽。然而，随着国际格局变化，这一商业合作项目正面临前所未有的政治压力。
+                </p>
+                <div class="video-placeholder" data-video-placeholder="darwin-intro">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时间线部分 -->
+        <section class="timeline-section">
+            <h2 class="section-title" style="text-align: center;">达尔文港事件时间线</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-items">
+                    <!-- 2015年 -->
+                    <div class="timeline-item china">
+                        <div class="timeline-content china">
+                            <div class="timeline-year china">2015年</div>
+                            <h3>成功竞标获得租赁权</h3>
+                            <p>澳大利亚北领地政府通过公开竞标将达尔文港99年租赁权以5.06亿澳元授予中国岚桥集团，岚桥集团获得达尔文东臂港土地和设备80%的所有权，并承诺追加2亿澳元用于基础设施升级。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item australia">
+                        <div class="timeline-content australia">
+                            <div class="timeline-year australia">2015年</div>
+                            <h3>美国表达"关切"</h3>
+                            <p>时任美国总统奥巴马对中澳港口合作表示"关切"，质疑中国投资可能带来的安全风险。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2015-2023年 -->
+                    <div class="timeline-item china">
+                        <div class="timeline-content china">
+                            <div class="timeline-year china">2015-2023年</div>
+                            <h3>港口升级改造</h3>
+                            <p>岚桥集团投入大量资金对达尔文港进行升级改造，构建了"澳大利亚-东南亚-中国"大宗物资运输走廊，将年吞吐量从不足500万吨提升至3000万吨，使港口从亏损转为连续8年盈利。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item australia">
+                        <div class="timeline-content australia">
+                            <div class="timeline-year australia">2018-2021年</div>
+                            <h3>立法施压</h3>
+                            <p>澳大利亚通过《关键基础设施安全法案》《对外关系法》和修订《外国投资法》，尝试收回港口经营权，但多次安全审查均确认"无实际风险"。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2024年 -->
+                    <div class="timeline-item china">
+                        <div class="timeline-content china">
+                            <div class="timeline-year china">2024年</div>
+                            <h3>经济贡献显著</h3>
+                            <p>达尔文港承担澳大利亚对华出口的23%货运量，贡献了澳大利亚北领地GDP的12%。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item australia">
+                        <div class="timeline-content australia">
+                            <div class="timeline-year australia">2024年</div>
+                            <h3>强化军事存在</h3>
+                            <p>美军在达尔文港附近扩建军事设施，并将达尔文港一同纳入其印太战略。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2025年 -->
+                    <div class="timeline-item china">
+                        <div class="timeline-content china">
+                            <div class="timeline-year china">2025年5月</div>
+                            <h3>外交回应与法律准备</h3>
+                            <p>中国驻澳大利亚肖千大使回应称"这在道义上是欠妥的"。岚桥集团启动国际商会仲裁院预备仲裁程序，要求澳方在违约时支付20年预期收益赔偿金（约200亿澳元）。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item australia">
+                        <div class="timeline-content australia">
+                            <div class="timeline-year australia">2025年5月</div>
+                            <h3>政治施压升级</h3>
+                            <p>澳大利亚总理阿尔巴尼斯宣称要收回达尔文港的经营权，政府与潜在买家进行非正式谈判。美国私募股权公司博龙资产管理正计划出价收购该租约。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 港口对比 -->
+                <div class="port-comparison">
+                    <div class="port-image old-port">
+                        <img src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="改造前的达尔文港">
+                        <div class="port-label">2015年改造前的达尔文港</div>
+                    </div>
+                    <div class="port-image new-port">
+                        <img src="https://images.unsplash.com/photo-1549923746-c502d488b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="岚桥升级后的达尔文港">
+                        <div class="port-label">岚桥升级后的现代化达尔文港</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 弹幕部分 -->
+        <section class="barrage-section">
+            <div class="barrage-bg" data-bg="darwin-panorama"></div>
+            <div class="barrage-container" id="barrageContainer"></div>
+            
+            <div class="risk-section">
+                <div class="risk-title" id="riskTitle">安全风险</div>
+                <div class="shatter-effect" id="shatterEffect"></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 地图聚焦动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const map = document.getElementById('worldMap');
+            const overlay = document.getElementById('mapOverlay');
+            const marker = document.getElementById('mapMarker');
+            
+            setTimeout(() => {
+                map.style.transform = 'scale(3) translate(15%, 25%)';
+                overlay.classList.add('active');
+                
+                setTimeout(() => {
+                    marker.style.top = '65%';
+                    marker.style.left = '85%';
+                    marker.classList.add('active');
+                }, 1000);
+            }, 1000);
+            
+            // 时间线动画
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('active');
+                }, 300 * index);
+            });
+            
+            // 弹幕生成
+            const barrages = [
+                {text: '澳前总理特恩布尔："今时不同往日了"', type: 'australia'},
+                {text: '岚桥董事特里·奥康纳："这是政客的政治足球比赛"', type: 'china'},
+                {text: '外交部毛宁："中企合法权益应受保护"', type: 'china'},
+                {text: '澳总理阿尔巴尼斯："希望港口回到澳大利亚人手中"', type: 'australia'},
+                {text: '外交部林剑："不要泛化国家安全概念"', type: 'china'},
+                {text: '北领地财政局长："没有中国投资港口可能破产"', type: 'media'},
+                {text: '2023年安全审查："无更改或取消租约必要"', type: 'media'},
+                {text: '北领地国库部长："确保港口保持运营"', type: 'australia'},
+                {text: '《悉尼先驱晨报》："政府摧毁国际投资者信任"', type: 'media'},
+                {text: '澳国防部长："反对中国在达尔文港经营权"', type: 'australia'},
+                {text: '中国外交部："尊重市场规则和契约精神"', type: 'china'},
+                {text: '国际投资分析师："政治干预破坏商业环境"', type: 'media'},
+            ];
+            
+            const container = document.getElementById('barrageContainer');
+            
+            function createBarrage() {
+                if (container.children.length > 20) return;
+                
+                const randomIndex = Math.floor(Math.random() * barrages.length);
+                const barrage = barrages[randomIndex];
+                
+                const barrageItem = document.createElement('div');
+                barrageItem.className = `barrage-item ${barrage.type}`;
+                barrageItem.textContent = barrage.text;
+                
+                // 随机垂直位置
+                const top = Math.floor(Math.random() * 80);
+                barrageItem.style.top = `${top}%`;
+                
+                // 随机速度
+                const duration = 15 + Math.random() * 20;
+                barrageItem.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(barrageItem);
+                
+                // 移除离开屏幕的弹幕
+                setTimeout(() => {
+                    if (barrageItem.parentNode) {
+                        barrageItem.parentNode.removeChild(barrageItem);
+                    }
+                }, duration * 1000);
+            }
+            
+            // 初始创建一批弹幕
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => createBarrage(), i * 1000);
+            }
+            
+            // 持续创建弹幕
+            setInterval(createBarrage, 2000);
+            
+            // "安全风险"破碎效果
+            const riskTitle = document.getElementById('riskTitle');
+            const shatterEffect = document.getElementById('shatterEffect');
+            
+            riskTitle.addEventListener('click', function() {
+                const text = this.textContent;
+                this.style.opacity = '0';
+                
+                for (let i = 0; i < text.length; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'shatter-piece';
+                    piece.textContent = text[i];
+                    piece.style.left = `${i * 60}px`;
+                    
+                    // 随机运动参数
+                    const tx = (Math.random() - 0.5) * 500;
+                    const ty = (Math.random() - 0.5) * 500;
+                    const r = (Math.random() - 0.5) * 720;
+                    
+                    piece.style.setProperty('--tx', `${tx}px`);
+                    piece.style.setProperty('--ty', `${ty}px`);
+                    piece.style.setProperty('--r', `${r}deg`);
+                    
+                    shatterEffect.appendChild(piece);
+                    
+                    // 移除碎片
+                    setTimeout(() => {
+                        piece.remove();
+                    }, 1500);
+                }
+                
+                // 重置效果
+                setTimeout(() => {
+                    this.style.opacity = '1';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

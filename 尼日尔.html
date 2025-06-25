@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>荒漠回响：尼日尔高管驱逐风波</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            desert: {
+              50: '#FAF6F0',
+              100: '#F5EBE0',
+              200: '#E6D2B8',
+              300: '#D9BC8C',
+              400: '#CC9966',
+              500: '#BF7730',
+              600: '#A65C28',
+              700: '#8C4A20',
+              800: '#733A18',
+              900: '#592D13',
+            },
+            crisis: {
+              100: '#E6F7FF',
+              200: '#BAE7FF',
+              300: '#91D5FF',
+              400: '#69B1FF',
+              500: '#4080FF',
+              600: '#165DFF',
+              700: '#0040C9',
+              800: '#00277A',
+              900: '#001D4D',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .sand-particle {
+        position: absolute;
+        background-color: rgba(245, 222, 179, 0.3);
+        border-radius: 50%;
+        animation: falling linear infinite;
+      }
+      .risk-bar {
+        transition: width 1.5s ease-out;
+      }
+      .word-cloud-item {
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+      .word-cloud-item:hover {
+        transform: scale(1.2);
+        z-index: 10;
+      }
+    }
+    
+    /* 沙粒飘落动画 */
+    @keyframes falling {
+      0% {
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+    
+    /* 响应式表格样式 */
+    .timeline-table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+    }
+    
+    /* 滚动条美化 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+  <!-- 沙粒效果容器 -->
+  <div id="sand-container" class="fixed inset-0 pointer-events-none z-0"></div>
+  
+  <!-- 导航栏 -->
+  <nav class="fixed w-full bg-desert-900/90 text-white z-50 transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="text-xl font-bold">荒漠回响</div>
+      <div class="hidden md:flex space-x-8">
+        <a href="#incident" class="hover:text-desert-300 transition-colors">事件介绍</a>
+        <a href="#confrontation" class="hover:text-desert-300 transition-colors">双方对峙</a>
+        <a href="#reasons" class="hover:text-desert-300 transition-colors">被驱逐原因</a>
+        <a href="#risks" class="hover:text-desert-300 transition-colors">形势判断</a>
+        <a href="#outlook" class="hover:text-desert-300 transition-colors">前景展望</a>
+      </div>
+      <button class="md:hidden text-white focus:outline-none" id="menu-toggle">
+        <i class="fa fa-bars text-xl"></i>
+      </button>
+    </div>
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden bg-desert-800/95" id="mobile-menu">
+      <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+        <a href="#incident" class="py-2 hover:text-desert-300 transition-colors">事件介绍</a>
+        <a href="#confrontation" class="py-2 hover:text-desert-300 transition-colors">双方对峙</a>
+        <a href="#reasons" class="py-2 hover:text-desert-300 transition-colors">被驱逐原因</a>
+        <a href="#risks" class="py-2 hover:text-desert-300 transition-colors">形势判断</a>
+        <a href="#outlook" class="py-2 hover:text-desert-300 transition-colors">前景展望</a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- 海报引入部分 -->
+  <section id="incident" class="relative min-h-screen flex items-center justify-center overflow-hidden" data-bg="niger-desert">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/1036/1920/1080'); filter: brightness(0.6);"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-desert-900/50 to-desert-900/80"></div>
+    
+    <div class="container mx-auto px-4 py-20 relative z-10 text-white max-w-5xl">
+      <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold mb-6 text-shadow leading-tight">荒漠回响：尼日尔高管驱逐风波</h1>
+      
+      <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 mb-8">
+        <div class="text-lg mb-4 opacity-90">2025年3月12日 尼亚美 天气炎热</div>
+        <p class="text-xl mb-6 leading-relaxed">
+          作为西非石油管道公司的中方高管，你清晨仍在监测管道与炼厂数据。午后，一纸驱逐令骤然降临：Soraz炼厂、CNPC与Wapco中方管理人员须在48小时内离境。烈日下，你看着输油管线沉默，二十多年积累的信任在命令声中瞬间崩塌。
+        </p>
+        <p class="text-xl leading-relaxed">
+          2025年3月12日，尼日尔政府以"外籍员工与当地工人工资差距过大"为由，驱逐三名中国石油高管；同日，又以"歧视性经营"吊销中资阳光国际酒店运营执照。目前国内燃油供应骤减，多地加油站排起长队，经济活动明显受挫，民众生活陷入燃油短缺困境。
+          此次风波源自2023年军政府推行"资源主权觉醒"政策，以及2024年中尼预付贷款与2025年追缴税款对峙暴露的合作机制与风险防控缺失。
+        </p>
+      </div>
+      
+      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <a href="#confrontation" class="text-white/80 hover:text-white transition-colors">
+          <i class="fa fa-angle-down text-3xl"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 阶段对比表部分 -->
+  <section id="confrontation" class="py-20 bg-white">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-12 text-center">双方对峙阶段</h2>
+      
+      <div class="timeline-table overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-desert-100">
+              <th class="px-6 py-4 text-left font-semibold">阶段</th>
+              <th class="px-6 py-4 text-left font-semibold">中方关键节点</th>
+              <th class="px-6 py-4 text-left font-semibold">反中方关键节点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-200 hover:bg-desert-50/70 transition-colors" data-crisis-level="1">
+              <td class="px-6 py-4 font-medium">起因</td>
+              <td class="px-6 py-4">自2003年起，中石油累计投资46–60亿美元建设阿加德姆油田、津德尔炼厂和尼日尔–贝宁管道，奠定二十余年合作基础</td>
+              <td class="px-6 py-4">2023年7月 军事政变后，军政府推行"资源主权觉醒"政策，强化对油气与铀矿控制，引发国际制裁并寻求多元资金来源</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-desert-50/70 transition-colors" data-crisis-level="2">
+              <td class="px-6 py-4 font-medium">发展</td>
+              <td class="px-6 py-4">2024年3月 与军政府签署4亿美元运输预付款贷款谅解备忘录，以阿加德姆油田石油收入偿还，缓解财政压力并保持项目运行</td>
+              <td class="px-6 py-4">继续在"资源主权"框架下对外资高压审查，依资源换资以渡短期财政难关</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-desert-50/70 transition-colors" data-crisis-level="3">
+              <td class="px-6 py-4 font-medium">危机爆发</td>
+              <td class="px-6 py-4">拒绝尼方无抵押新贷款要求，坚持商业合规原则；中国驻尼使馆开始关注并准备介入</td>
+              <td class="px-6 py-4">2025年3月 初 向中尼合资炼厂追缴税款，并在新贷请求被拒后转向对峙</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-desert-50/70 transition-colors" data-crisis-level="4">
+              <td class="px-6 py-4 font-medium">危机升级</td>
+              <td class="px-6 py-4">中国驻尼使馆紧急介入，呼吁"依法合规经营"并推动友好谈判</td>
+              <td class="px-6 py-4">2025年3月12日• 要求Soraz、CNPC与Wapco中方管理团队48小时内离境• 驱逐三名中国石油高管• 吊销中资阳光国际酒店执照</td>
+            </tr>
+            <tr class="hover:bg-desert-50/70 transition-colors" data-crisis-level="5">
+              <td class="px-6 py-4 font-medium">后续</td>
+              <td class="px-6 py-4">5月20–21日• 外交部重申"真、善、忍"原则和正确义利观• 使馆推动法律途径协商，争取保留必要人员并妥善安排离职• 企业准备通过谈判解决债务与税务争议</td>
+              <td class="px-6 py-4">5月20日 奥马鲁致信中石油CEO，拒绝私人会谈并指责"不遵守当地法规"5月21日 再函SORAZ，表示可灵活决定部分中方员工离境时间，强调须符合新外资审查法案</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 危机程度图例 -->
+      <div class="mt-8 flex justify-center items-center">
+        <div class="flex space-x-4 text-sm">
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded-full bg-crisis-100 mr-2"></div>
+            <span>低</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded-full bg-crisis-300 mr-2"></div>
+            <span>中低</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded-full bg-crisis-500 mr-2"></div>
+            <span>中高</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded-full bg-crisis-700 mr-2"></div>
+            <span>高</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded-full bg-crisis-900 mr-2"></div>
+            <span>极高</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 被驱逐原因部分 -->
+  <section id="reasons" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4 max-w-5xl">
+      <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-12 text-center">被驱逐原因</h2>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+          <h3 class="text-xl font-bold mb-4 text-desert-700 flex items-center">
+            <i class="fa fa-exclamation-circle text-desert-500 mr-2"></i>
+            直接原因
+          </h3>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa fa-circle text-xs text-desert-500 mt-1.5 mr-2"></i>
+              <span>中石油拒绝尼日尔政府要求提供新贷款的无理要求</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-circle text-xs text-desert-500 mt-1.5 mr-2"></i>
+              <span>存在劳工纠纷，尼方指控中企"超时工作"、"本地员工薪资不达标"</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-circle text-xs text-desert-500 mt-1.5 mr-2"></i>
+              <span>环保标准争议、未充分雇佣本地管理层，被解读为"新殖民主义"</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+          <h3 class="text-xl font-bold mb-4 text-desert-700 flex items-center">
+            <i class="fa fa-database text-desert-500 mr-2"></i>
+            深层动因
+          </h3>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa fa-circle text-xs text-desert-500 mt-1.5 mr-2"></i>
+              <span>军政府亟需通过"强硬外资审查"树立权威，中企或成政治博弈牺牲品</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-circle text-xs text-desert-500 mt-1.5 mr-2"></i>
+              <span>西方舆论渲染"中国债务陷阱"，助长尼国内民族主义情绪</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 风险分析部分 -->
+  <section id="risks" class="py-20 bg-white">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-12 text-center">形势判断</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- 战略误判风险卡片 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300" data-icon="risk-warning">
+          <div class="bg-crisis-100 p-6">
+            <div class="w-16 h-16 bg-crisis-500 rounded-full flex items-center justify-center mb-4 group-hover:bg-crisis-700 transition-colors">
+              <i class="fa fa-exclamation-triangle text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-crisis-800">战略误判风险</h3>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-700 mb-6">尼日尔驱逐中资将导致石油收入断崖式下跌。中石油运营的阿加德姆油田占该国原油产量的80%，津德尔炼油厂解决了尼日尔90%的成品油需求，短期内难寻同等实力和技术的替代投资者。</p>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>原油产量依赖度</span>
+                <span>80%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-600 h-2.5 rounded-full" style="width: 0%" data-width="80%"></div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>成品油供应依赖度</span>
+                <span>90%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-700 h-2.5 rounded-full" style="width: 0%" data-width="90%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>替代投资者难度</span>
+                <span>95%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-800 h-2.5 rounded-full" style="width: 0%" data-width="95%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 基础设施中断风险卡片 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300" data-icon="risk-warning">
+          <div class="bg-crisis-200 p-6">
+            <div class="w-16 h-16 bg-crisis-600 rounded-full flex items-center justify-center mb-4 group-hover:bg-crisis-800 transition-colors">
+              <i class="fa fa-chain-broken text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-crisis-800">基础设施中断风险</h3>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-700 mb-6">中国承建的塔瓦—津德尔铁路和尼亚美大桥等现代化交通节点若因中尼关系恶化停滞，将使物流成本激增，加剧内陆国地理劣势，对经济造成严重制约。</p>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>铁路运输依赖度</span>
+                <span>75%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-600 h-2.5 rounded-full" style="width: 0%" data-width="75%"></div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>物流成本增幅预测</span>
+                <span>120%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-700 h-2.5 rounded-full" style="width: 0%" data-width="120%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>地理劣势加剧程度</span>
+                <span>85%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-800 h-2.5 rounded-full" style="width: 0%" data-width="85%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 外资撤离风险卡片 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300" data-icon="risk-warning">
+          <div class="bg-crisis-300 p-6">
+            <div class="w-16 h-16 bg-crisis-700 rounded-full flex items-center justify-center mb-4 group-hover:bg-crisis-900 transition-colors">
+              <i class="fa fa-money text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-crisis-800">外资撤离风险</h3>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-700 mb-6">若外交不稳导致外资撤出，尼日尔将失去资源开发能力，丰富的铀矿和石油资源可能无法转化为经济动力，陷入"资源丰富但缺乏产业"困境。</p>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>外资占比资源开发</span>
+                <span>90%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-600 h-2.5 rounded-full" style="width: 0%" data-width="90%"></div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-1">
+                <span>资源开发技术依赖度</span>
+                <span>95%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-700 h-2.5 rounded-full" style="width: 0%" data-width="95%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>经济结构脆弱性</span>
+                <span>88%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="risk-bar bg-crisis-800 h-2.5 rounded-full" style="width: 0%" data-width="88%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 词云图部分 -->
+      <div class="mt-16 bg-gray-50 rounded-xl p-8 shadow-inner">
+        <h3 class="text-xl font-bold mb-8 text-center">风险关键词分析</h3>
+        <div class="flex flex-wrap justify-center items-center min-h-[200px]" id="word-cloud">
+          <div class="word-cloud-item text-crisis-900 text-4xl m-3" style="font-size: 3.5rem;">资源荒漠</div>
+          <div class="word-cloud-item text-crisis-800 text-3xl m-3" style="font-size: 2.8rem;">国际孤立</div>
+          <div class="word-cloud-item text-crisis-700 text-2xl m-3" style="font-size: 2.3rem;">外资撤离</div>
+          <div class="word-cloud-item text-crisis-600 text-xl m-3" style="font-size: 1.9rem;">经济崩溃</div>
+          <div class="word-cloud-item text-crisis-500 text-lg m-3" style="font-size: 1.6rem;">能源短缺</div>
+          <div class="word-cloud-item text-crisis-400 text-base m-3" style="font-size: 1.4rem;">债务危机</div>
+          <div class="word-cloud-item text-crisis-300 text-sm m-3" style="font-size: 1.2rem;">政治动荡</div>
+          <div class="word-cloud-item text-crisis-200 text-xs m-3" style="font-size: 1rem;">社会不安</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 前景展望部分 -->
+  <section id="outlook" class="py-20 bg-gray-50 relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://picsum.photos/id/1036/1920/1080');"></div>
+    
+    <div class="container mx-auto px-4 max-w-5xl relative z-10">
+      <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-12 text-center">前景展望</h2>
+      
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+        <h3 class="text-xl font-bold mb-6 text-desert-700">合作发展的机遇</h3>
+        <p class="text-gray-700 mb-6 leading-relaxed">
+          如果尼日尔继续凭激情驱逐外资，必将陷入资源荒漠与国际孤立的不归路。与其自毁发展，不如握紧手中油铀筹码——
+        </p>
+        <p class="text-gray-700 mb-6 leading-relaxed">
+          以油气为枢纽推动区域合作：建议合理利用中国"一带一路"和非洲自贸区机遇，以津德尔炼油厂为核心，建设尼日尔—贝宁—尼日利亚跨国石化走廊，提升当地经济活力，并吸引中东资本共建储运基地，将地理劣势转化为区域贸易枢纽优势，提升国际市场地位。
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+          主权诉求的转化路径：尼日尔的困境源于"反殖民"激情与"后殖民"现实的撕裂。与其盲目驱逐外国资本，不如以资源为筹码构建多元合作网络，将主权诉求转化为发展杠杆，使每吨铀矿、每桶石油都成为国民尊严的基石。
+        </p>
+      </div>
+      
+      <!-- 移动交叉效果文字 -->
+      <div class="relative h-40 overflow-hidden mb-8 rounded-xl bg-desert-100 flex items-center justify-center">
+        <div class="absolute text-3xl font-bold text-desert-800" id="floating-text">
+          将主权诉求化作发展杠杆，让每桶石油、每吨铀矿都成为国家尊严与繁荣的基石。
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 页脚 -->
+  <footer class="bg-desert-900 text-white py-12">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <h3 class="text-xl font-bold mb-2">荒漠回响</h3>
+          <p class="text-desert-300">尼日尔高管驱逐风波专题报道</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#incident" class="text-desert-300 hover:text-white transition-colors">事件介绍</a>
+          <a href="#confrontation" class="text-desert-300 hover:text-white transition-colors">双方对峙</a>
+          <a href="#reasons" class="text-desert-300 hover:text-white transition-colors">被驱逐原因</a>
+          <a href="#risks" class="text-desert-300 hover:text-white transition-colors">形势判断</a>
+          <a href="#outlook" class="text-desert-300 hover:text-white transition-colors">前景展望</a>
+        </div>
+      </div>
+      <div class="border-t border-desert-800 mt-8 pt-8 text-center text-desert-400 text-sm">
+        <p>© 2025 国际事务分析中心. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- JavaScript -->
+  <script>
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('py-2');
+        navbar.classList.remove('py-3');
+        navbar.classList.add('shadow-md');
+      } else {
+        navbar.classList.add('py-3');
+        navbar.classList.remove('py-2');
+        navbar.classList.remove('shadow-md');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // 关闭移动菜单
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+    
+    // 沙粒飘落效果
+    function createSandParticles() {
+      const container = document.getElementById('sand-container');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('sand-particle');
+        
+        // 随机大小
+        const size = Math.random() * 3 + 1;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // 随机位置
+        const left = Math.random() * 100;
+        particle.style.left = `${left}%`;
+        
+        // 随机延迟和持续时间
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(particle);
+      }
+    }
+    
+    // 风险条形图动画
+    function animateRiskBars() {
+      const bars = document.querySelectorAll('.risk-bar');
+      
+      bars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        setTimeout(() => {
+          bar.style.width = width;
+        }, 500);
+      });
+    }
+    
+    // 漂浮文字动画
+    function animateFloatingText() {
+      const text = document.getElementById('floating-text');
+      let position = 0;
+      const speed = 1;
+      
+      function updatePosition() {
+        position = (position + speed) % (window.innerWidth * 2);
+        text.style.transform = `translateX(${(window.innerWidth / 2 - text.offsetWidth / 2 - position) % window.innerWidth}px)`;
+        requestAnimationFrame(updatePosition);
+      }
+      
+      updatePosition();
+    }
+    
+    // 监听元素是否进入视口
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === 'risks') {
+            animateRiskBars();
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    observer.observe(document.getElementById('risks'));
+    
+    // 表格行悬停效果
+    document.querySelectorAll('tr[data-crisis-level]').forEach(row => {
+      const level = row.getAttribute('data-crisis-level');
+      
+      row.addEventListener('mouseenter', () => {
+        row.style.backgroundColor = `rgba(64, 128, 255, 0.${level})`;
+      });
+      
+      row.addEventListener('mouseleave', () => {
+        row.style.backgroundColor = '';
+      });
+    });
+    
+    // 页面加载完成后执行
+    window.addEventListener('load', () => {
+      createSandParticles();
+      animateFloatingText();
+    });
+  </script>
+</body>
+</html>
+    
